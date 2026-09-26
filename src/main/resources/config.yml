@@ -1,0 +1,365 @@
+# =====================================================================
+#  CrystallineResonance
+# ---------------------------------------------------------------------
+#  Text      : MiniMessage  -> https://docs.advntr.dev/minimessage/format.html
+#  Colors    : "#RRGGBB"
+#  Sounds    : "<sound-key> [volume] [pitch] [delay-ticks]"
+#              Any sound key works, including custom resource-pack sounds
+#              such as "crystalline:spell.frost.cast" (see README.md).
+#  Materials : Bukkit material names, e.g. AMETHYST_SHARD
+#
+#  Apply changes with /crystalline reload
+# =====================================================================
+
+# Worlds (by name) where spells cannot be cast.
+disabled-worlds: []
+
+# ---------------------------------------------------------------------
+#  Mana
+# ---------------------------------------------------------------------
+mana:
+  max: 100.0
+  # Mana a player has the first time they join.
+  starting: 100.0
+  # Mana restored per second.
+  regen-per-second: 4.0
+  # Seconds after a cast before mana starts regenerating again.
+  regen-delay: 1.5
+  # How often (ticks, 20 = 1 second) mana regenerates and the action bar refreshes.
+  update-interval-ticks: 10
+
+  display:
+    # ALWAYS       - mana is always shown in the action bar
+    # HOLDING_TOME - only while holding a spell tome
+    # SMART        - while holding a tome or while mana is below max
+    mode: SMART
+    # Placeholders: <bar> <mana> <max> <percent>
+    format: "<gradient:#9b5de5:#00bbf9>✦ Mana</gradient> <bar> <white><mana></white><gray>/</gray><white><max></white>"
+    bar:
+      length: 20
+      symbol: "|"
+      filled-color: "#4CC9F0"
+      # Used for the filled part when mana is below low-threshold.
+      low-color: "#F72585"
+      empty-color: "#3A3A4A"
+      # Fraction of max mana (0.0 - 1.0).
+      low-threshold: 0.25
+    # Seconds that cast feedback (cooldown, not enough mana, crystal found)
+    # stays in the action bar before the mana bar comes back.
+    feedback-duration: 1.5
+
+# ---------------------------------------------------------------------
+#  Combat
+# ---------------------------------------------------------------------
+combat:
+  # Whether spells can hurt other players. World PvP rules, teams and
+  # protection plugins are respected either way.
+  affect-players: true
+  # Whether spells can hurt the caster's own tamed pets.
+  hit-own-pets: false
+
+# ---------------------------------------------------------------------
+#  Feedback sounds (played only to the caster)
+# ---------------------------------------------------------------------
+feedback-sounds:
+  insufficient-mana:
+    - "minecraft:block.note_block.bass 1.0 0.6"
+    - "minecraft:block.amethyst_block.hit 0.8 0.5"
+  cooldown:
+    - "minecraft:block.note_block.hat 0.6 0.8"
+  no-permission:
+    - "minecraft:block.note_block.didgeridoo 0.8 0.5"
+  crystal-found:
+    - "minecraft:block.amethyst_cluster.break 1.0 1.2"
+    - "minecraft:block.amethyst_block.chime 1.0 1.6 2"
+    - "minecraft:entity.experience_orb.pickup 0.6 1.4 4"
+
+# ---------------------------------------------------------------------
+#  Crystals
+# ---------------------------------------------------------------------
+crystals:
+  # Only drop crystals in Nether worlds.
+  require-nether: true
+  # Whether blocks mined with Silk Touch can drop crystals.
+  silk-touch-drops: false
+  # Each level of Fortune multiplies the drop chance by (1 + level * fortune-bonus).
+  fortune-bonus: 0.25
+  # Multiplies every drop chance below.
+  global-multiplier: 1.0
+  # Blocks placed by players never drop crystals (stops place-and-break farming).
+  ignore-placed-blocks: true
+
+  # Extra crystals in Nether structure chests.
+  loot:
+    enabled: true
+    # Chance (0.0 - 1.0) that a chest contains crystals.
+    chance: 0.35
+    min: 1
+    max: 3
+    # Loot tables that can contain crystals. Leave empty for every chest in the Nether.
+    tables:
+      - chests/bastion_treasure
+      - chests/bastion_other
+      - chests/bastion_bridge
+      - chests/bastion_hoglin_stable
+      - chests/nether_bridge
+      - chests/ruined_portal
+
+  types:
+    amethyst:
+      material: AMETHYST_SHARD
+      name: "<gradient:#c77dff:#e0aaff>Resonant Amethyst Crystal</gradient>"
+      lore:
+        - "<gray>A shard that hums with frozen echoes."
+        - "<dark_gray>Found deep within the Nether."
+      # Particle color used when this crystal is found.
+      color: "#C77DFF"
+      # Relative weight when picking crystals for chest loot.
+      loot-weight: 3
+      # Block -> drop chance (0.0 - 1.0) per block mined.
+      drops:
+        BLACKSTONE: 0.01
+        GILDED_BLACKSTONE: 0.20
+        BASALT: 0.008
+        CRYING_OBSIDIAN: 0.25
+
+    copper:
+      material: COPPER_INGOT
+      name: "<gradient:#e76f51:#f4a261>Galvanic Copper Crystal</gradient>"
+      lore:
+        - "<gray>Crackles with stored lightning."
+        - "<dark_gray>Found deep within the Nether."
+      color: "#F4A261"
+      loot-weight: 3
+      drops:
+        NETHER_GOLD_ORE: 0.06
+        MAGMA_BLOCK: 0.02
+        NETHERRACK: 0.002
+
+    quartz:
+      material: QUARTZ
+      name: "<gradient:#fff1e6:#ff7b54>Emberheart Quartz Crystal</gradient>"
+      lore:
+        - "<gray>Warm to the touch, it glows like a coal."
+        - "<dark_gray>Found deep within the Nether."
+      color: "#FF7B54"
+      loot-weight: 3
+      drops:
+        NETHER_QUARTZ_ORE: 0.08
+        GLOWSTONE: 0.05
+        ANCIENT_DEBRIS: 0.50
+
+# ---------------------------------------------------------------------
+#  Spells
+#  Common keys:
+#    enabled, name, mana-cost, cooldown (seconds),
+#    particles.primary / particles.secondary / particles.size,
+#    sounds.cast / sounds.impact, tome, recipe
+#  Recipe ingredients: a material name, or crystal:<amethyst|copper|quartz>
+# ---------------------------------------------------------------------
+spells:
+  frost:
+    enabled: true
+    name: "<gradient:#a2d2ff:#e0fbfc>Frost Bolt</gradient>"
+    mana-cost: 20.0
+    cooldown: 1.5
+    damage: 6.0
+    # Blocks the bolt travels before fading.
+    range: 32.0
+    # Blocks per tick.
+    speed: 1.6
+    # Extra hit-box radius around the bolt.
+    hitbox: 0.4
+    # Nearby entities also take damage * splash-damage-multiplier.
+    splash-radius: 1.75
+    splash-damage-multiplier: 0.5
+    slowness:
+      duration-ticks: 60
+      amplifier: 1
+    # Frost overlay on the target (vanilla powder-snow freezing, 140+ = fully frozen).
+    freeze-ticks: 160
+    particles:
+      primary: "#A2D2FF"
+      secondary: "#FFFFFF"
+      size: 1.2
+    sounds:
+      cast:
+        - "minecraft:entity.player.hurt_freeze 1.0 1.6"
+        - "minecraft:block.amethyst_block.resonate 1.0 1.8"
+        - "minecraft:entity.snowball.throw 0.8 0.6"
+      impact:
+        - "minecraft:block.glass.break 1.0 1.4"
+        - "minecraft:block.powder_snow.break 1.0 0.8"
+        - "minecraft:block.amethyst_block.chime 1.0 1.2 2"
+    tome:
+      material: BOOK
+      name: "<gradient:#a2d2ff:#e0fbfc>Tome of Frost Bolt</gradient>"
+      # Placeholders: <spell> <cost> <cooldown>
+      lore:
+        - "<gray>Hurls a shard of resonant ice that"
+        - "<gray>slows and freezes its target."
+        - ""
+        - "<dark_aqua>Mana: <white><cost></white>  <dark_aqua>Cooldown: <white><cooldown>s</white>"
+        - "<dark_gray>Right-click to cast."
+    recipe:
+      enabled: true
+      shape:
+        - "SCS"
+        - "CBC"
+        - "SCS"
+      ingredients:
+        S: SNOWBALL
+        C: crystal:amethyst
+        B: BOOK
+
+  inferno:
+    enabled: true
+    name: "<gradient:#ff4800:#ffb700>Inferno Wave</gradient>"
+    mana-cost: 35.0
+    cooldown: 6.0
+    damage: 5.0
+    # Final radius of the wave in blocks.
+    range: 8.0
+    # Blocks the wave expands per tick.
+    speed: 0.6
+    # Width of the wave in degrees in front of the caster (360 = full ring).
+    arc: 120.0
+    fire-ticks: 80
+    knockback: 0.6
+    knockback-y: 0.25
+    # Stops the wave from hitting entities behind walls.
+    require-line-of-sight: true
+    particles:
+      primary: "#FF4800"
+      secondary: "#FFB700"
+      size: 1.4
+    sounds:
+      cast:
+        - "minecraft:entity.blaze.shoot 1.0 0.8"
+        - "minecraft:item.firecharge.use 1.0 0.7"
+        - "minecraft:entity.ghast.shoot 0.6 0.6 2"
+      # Played along the wave front while it expands.
+      travel:
+        - "minecraft:block.fire.ambient 1.0 1.2"
+      impact:
+        - "minecraft:entity.generic.burn 0.8 1.0"
+        - "minecraft:block.lava.pop 1.0 1.0"
+    tome:
+      material: BOOK
+      name: "<gradient:#ff4800:#ffb700>Tome of Inferno Wave</gradient>"
+      lore:
+        - "<gray>Unleashes a roaring wave of flame"
+        - "<gray>that scorches and repels foes."
+        - "<dark_gray>Fire-immune creatures are unharmed."
+        - ""
+        - "<gold>Mana: <white><cost></white>  <gold>Cooldown: <white><cooldown>s</white>"
+        - "<dark_gray>Right-click to cast."
+    recipe:
+      enabled: true
+      shape:
+        - "SCS"
+        - "CBC"
+        - "SCS"
+      ingredients:
+        S: BLAZE_POWDER
+        C: crystal:quartz
+        B: BOOK
+
+  lightning:
+    enabled: true
+    name: "<gradient:#f9f871:#4cc9f0>Lightning Strike</gradient>"
+    mana-cost: 45.0
+    cooldown: 8.0
+    damage: 8.0
+    # Maximum targeting distance.
+    range: 40.0
+    # Radius of the strike's area damage.
+    radius: 2.5
+    # Ticks the strike charges (and tracks a locked-on target) before landing.
+    charge-ticks: 10
+    # Also show a vanilla lightning bolt (visual only: no fire, no extra damage).
+    visual-lightning: true
+    # Height the particle bolt descends from.
+    bolt-height: 14.0
+    chain:
+      # Extra targets the lightning arcs to (0 disables chaining).
+      jumps: 2
+      range: 6.0
+      # Damage multiplier applied per jump.
+      damage-multiplier: 0.6
+      delay-ticks: 3
+    particles:
+      primary: "#F9F871"
+      secondary: "#4CC9F0"
+      size: 1.5
+    sounds:
+      cast:
+        - "minecraft:block.copper_bulb.turn_on 1.0 1.2"
+        - "minecraft:block.respawn_anchor.charge 0.8 1.6"
+        - "minecraft:block.beacon.power_select 0.6 2.0"
+      impact:
+        - "minecraft:entity.lightning_bolt.impact 1.2 1.0"
+        - "minecraft:item.trident.thunder 0.8 1.2"
+      chain:
+        - "minecraft:block.copper_bulb.turn_on 0.8 2.0"
+        - "minecraft:entity.lightning_bolt.impact 0.4 1.8"
+    tome:
+      material: BOOK
+      name: "<gradient:#f9f871:#4cc9f0>Tome of Lightning Strike</gradient>"
+      lore:
+        - "<gray>Calls down a bolt of galvanic lightning"
+        - "<gray>that arcs between nearby foes."
+        - ""
+        - "<yellow>Mana: <white><cost></white>  <yellow>Cooldown: <white><cooldown>s</white>"
+        - "<dark_gray>Right-click to cast."
+    recipe:
+      enabled: true
+      shape:
+        - "SCS"
+        - "CBC"
+        - "SCS"
+      ingredients:
+        S: REDSTONE
+        C: crystal:copper
+        B: BOOK
+
+# ---------------------------------------------------------------------
+#  Messages
+# ---------------------------------------------------------------------
+messages:
+  prefix: "<dark_purple>[<gradient:#b388ff:#4dd0e1>Crystalline</gradient>]</dark_purple> "
+  # Action-bar messages
+  insufficient-mana: "<red>Not enough mana for <spell><red>! <gray>(<white><cost></white> needed, <white><mana></white> available)"
+  on-cooldown: "<spell> <gray>is recharging... <white><time>s"
+  spell-no-permission: "<red>You are not attuned to <spell><red>."
+  spell-disabled: "<spell> <red>has been sealed away."
+  world-disabled: "<red>The crystals fall silent in this world."
+  crystal-found: "<gray>You found a <crystal><gray>!"
+  # Chat messages
+  no-permission: "<red>You don't have permission to do that."
+  player-only: "<red>Only players can do that."
+  player-not-found: "<red>Player <white><player></white> is not online."
+  unknown-type: "<red>Unknown <kind>: <white><value></white>. <gray>Options: <white><options>"
+  invalid-number: "<red><white><value></white> is not a valid number."
+  reloaded: "<green>Configuration reloaded."
+  mana-self: "<gray>Mana: <aqua><mana></aqua><gray>/<aqua><max>"
+  mana-other: "<white><player></white><gray>'s mana: <aqua><mana></aqua><gray>/<aqua><max>"
+  mana-set: "<gray>Set <white><player></white><gray>'s mana to <aqua><mana></aqua><gray>."
+  cooldowns-reset: "<gray>Reset spell cooldowns for <white><player></white><gray>."
+  given: "<gray>Gave <white><amount>x</white> <item> <gray>to <white><player></white><gray>."
+  spell-list-header: "<gradient:#b388ff:#4dd0e1>Spells</gradient>"
+  # Placeholders: <spell> <cost> <cooldown> <status>
+  spell-list-entry: " <dark_gray>•</dark_gray> <spell> <gray>- <white><cost></white> mana, <white><cooldown>s</white> cooldown <status>"
+  spell-list-attuned: "<green>(attuned)"
+  spell-list-locked: "<red>(locked)"
+  # Use \< for a literal "<" in single-quoted lines.
+  help:
+    - '<gradient:#b388ff:#4dd0e1>CrystallineResonance</gradient> <gray>commands'
+    - ' <white>/cr mana [player]</white> <gray>- show mana'
+    - ' <white>/cr spells</white> <gray>- list spells and costs'
+  help-admin:
+    - ' <white>/cr give \<player> crystal \<type> [amount]</white>'
+    - ' <white>/cr give \<player> tome \<spell> [amount]</white>'
+    - ' <white>/cr setmana \<player> \<amount|max></white>'
+    - ' <white>/cr resetcooldowns \<player></white>'
+    - ' <white>/cr reload</white>'
