@@ -60,7 +60,8 @@ def face_uv(face, frm, to, fn):
         lt, rb = (x0, y0, z1), (x1, y0, z0)
     u1, v1 = fn(*lt)
     u2, v2 = fn(*rb)
-    return [r4(u1), r4(v1), r4(u2), r4(v2)]
+    # UVs outside 0..16 would sample neighbouring textures in the atlas
+    return [r4(min(16.0, max(0.0, c))) for c in (u1, v1, u2, v2)]
 
 
 def element(frm, to, faces, rotation=None, shade=True, light=None):
@@ -170,7 +171,7 @@ def build_nuke():
     # collar
     els += cylinder(17.3, 18.5, 4.3, "#metal", 10, 16, cap_tex="#dark")
     # nose cone (ogive)
-    n = 12
+    n = 22
     h = (27.2 - NOSE_BOT) / n
     for i in range(n):
         a = NOSE_BOT + i * h
