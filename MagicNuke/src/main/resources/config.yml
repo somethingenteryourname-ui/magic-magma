@@ -1,0 +1,123 @@
+# ============================================================
+#  MagicNuke configuration
+#  After editing, run /nuke reload
+# ============================================================
+
+# Nuke sizes you can hand out with /nuke give <size>.
+# You can add your own sizes here too. You can also give a nuke with any
+# radius, e.g. /nuke give 33
+#
+#   name           display name (MiniMessage format)
+#   radius         crater radius in blocks
+#   model-scale    how big the 3D missile is (1.0 = 2.5 blocks tall)
+#   flight-height  how many blocks it flies up before turning around
+#   fuse-seconds   countdown after it is lit, before liftoff
+sizes:
+  mini:
+    name: "<gradient:#b6ff5c:#f2ff7a>Mini Nuke</gradient>"
+    radius: 8
+    model-scale: 0.8
+    flight-height: 45
+    fuse-seconds: 3
+  small:
+    name: "<gradient:#ffe25c:#ffb347>Tactical Nuke</gradient>"
+    radius: 16
+    model-scale: 1.0
+    flight-height: 65
+    fuse-seconds: 3
+  medium:
+    name: "<gradient:#ff9a3c:#ff5e3a>Atomic Bomb</gradient>"
+    radius: 26
+    model-scale: 1.3
+    flight-height: 85
+    fuse-seconds: 4
+  large:
+    name: "<gradient:#ff5e3a:#ff1f4b>Hydrogen Bomb</gradient>"
+    radius: 40
+    model-scale: 1.7
+    flight-height: 105
+    fuse-seconds: 4
+  tsar:
+    name: "<gradient:#ff1f4b:#b31bff>Tsar Bomba</gradient>"
+    radius: 60
+    model-scale: 2.2
+    flight-height: 130
+    fuse-seconds: 5
+
+# Limits for nukes given with a number instead of a size name.
+custom:
+  min-radius: 3
+  max-radius: 100
+
+explosion:
+  # Destroy blocks and leave a crater.
+  break-blocks: true
+  # Crater depth below the impact point, as a fraction of the radius.
+  crater-depth: 0.5
+  # How high above the impact point blocks are blown away, as a fraction of the radius.
+  blast-height: 0.9
+  # Max time per server tick spent carving the crater. Lower = less lag, slower crater.
+  max-millis-per-tick: 25
+  # Turn the ground around the crater into scorched blocks, magma, basalt, glass...
+  scorch: true
+  # Start fires around the crater.
+  fire: true
+  # Throw flying debris blocks (they vanish when they land).
+  debris: true
+  # Hurt and fling mobs and players.
+  damage-entities: true
+  # Damage at the center. Falls off with distance.
+  max-damage: 150.0
+  # How far the blast hurts things, as a multiple of the radius.
+  damage-radius: 1.6
+  # Nukes caught in a blast get launched too.
+  chain-reaction: true
+  # White screen flash (needs the resource pack).
+  flash: true
+  # Camera shake for nearby players.
+  screen-shake: true
+  # Nausea for players very close to the blast.
+  nausea: true
+  # 3D mushroom cloud made of display entities, plus particles.
+  mushroom-cloud: true
+  cloud-seconds: 22
+  # Ash falling and a darker sky around the blast site afterwards.
+  fallout: true
+  fallout-seconds: 40
+  # Geiger counter clicks and mild poison near ground zero during fallout.
+  radiation: true
+  # Worlds where nukes can't be placed or launched.
+  disabled-worlds: []
+
+nuke:
+  # Placed nukes launch when they get a redstone signal.
+  allow-redstone: true
+  # Punch a placed (unlit) nuke to pick it back up.
+  pickup-with-punch: true
+  # Nukes caught in a normal TNT/creeper explosion get lit.
+  ignite-from-explosions: true
+  # Dispensers holding nukes place and launch them.
+  dispensers-launch: true
+  # Players within this many blocks get the launch warnings.
+  warning-radius: 200
+
+# The plugin hosts its own resource pack (3D nuke model and explosion effects)
+# and sends it to players when they join. No uploading needed.
+pack:
+  enabled: true
+  send-on-join: true
+  # If true, players who decline the pack get kicked. Keep this false until
+  # you've checked the download works.
+  required: false
+  prompt: "<red>☢ MagicNuke</red> <gray>uses this small pack for its 3D nukes and explosion effects."
+  # Port for the built-in download server. It must be reachable from players'
+  # computers, so open or forward it like your game port (TCP).
+  port: 8163
+  bind-address: "0.0.0.0"
+  # Address players download from. Leave blank to use the same address each
+  # player typed to join the server (works for most setups).
+  public-address: ""
+  # If your host doesn't let you open another port: upload
+  # plugins/MagicNuke/MagicNuke-ResourcePack.zip somewhere (e.g. mc-packs.net)
+  # and put the direct download link here. The built-in server is then turned off.
+  external-url: ""

@@ -151,3 +151,9 @@ public void onCast(dev.crystalline.resonance.api.SpellCastEvent event) {
     event.setManaCost(event.getManaCost() * 0.5); // e.g. a mana-discount perk
 }
 ```
+
+---
+
+## Also in this repo: MagicNuke
+
+[`MagicNuke/`](MagicNuke/README.md) is a separate Paper 1.21.11 plugin that adds launchable 3D nukes with mushroom clouds and craters. It includes its own resource pack. Build it with `./gradlew -p MagicNuke build`.

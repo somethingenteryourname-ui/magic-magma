@@ -1,0 +1,26 @@
+name: MagicNuke
+version: '${version}'
+main: dev.magicnuke.MagicNuke
+api-version: '1.21.11'
+description: '${description}'
+authors: [MagicNuke]
+
+commands:
+  nuke:
+    description: Get, launch and manage nukes.
+    usage: /nuke help
+    aliases: [nukes, magicnuke]
+
+permissions:
+  magicnuke.admin:
+    description: Use every /nuke admin command (give, launch, strike, clear, reload).
+    default: op
+    children:
+      magicnuke.use: true
+      magicnuke.pack: true
+  magicnuke.use:
+    description: Place, light and pick up nukes.
+    default: true
+  magicnuke.pack:
+    description: Re-download the MagicNuke resource pack with /nuke pack.
+    default: true
