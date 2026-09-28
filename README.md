@@ -1,5 +1,7 @@
 # CrystallineResonance
 
+> This repo also contains **[InfiniteFireball](infinite-fireball/README.md)**, a separate plugin: a fire charge that never runs out and throws fireballs with adjustable size and damage, plus a totem-pop mode.
+
 A Paper plugin for Minecraft Java **1.21.11**. Players dig up Amethyst, Copper and Quartz crystals in the Nether, craft them into spell tomes, and right-click the tomes to cast spells that cost mana. Mana regenerates over time.
 
 | Spell | Crystal | What it does |

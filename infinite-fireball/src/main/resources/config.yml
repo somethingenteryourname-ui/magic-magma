@@ -1,0 +1,60 @@
+# InfiniteFireball
+# Everything here can also be changed in-game with /fireball, which saves
+# the new value back into this file.
+
+fireball:
+  # Explosion power of each fireball. It sets both how big the blast is and how far
+  # it reaches: creatures within about 2 x size blocks are hit.
+  # For reference: ghast fireball = 1, TNT = 4, charged creeper = 6.
+  size: 2.0
+
+  # Damage to every creature hit by the blast, in HEARTS (1 heart = 2 health).
+  # Armor and enchantments still reduce this. Not used when totem-mode is on.
+  damage: 5.0
+
+  # When true, every creature hit by a fireball has a Totem of Undying popped,
+  # or dies if it isn't holding one. Armor, shields, Protection and Resistance
+  # don't stop it, and armor/shields take NO durability damage.
+  # Players in creative or spectator mode are never affected.
+  totem-mode: false
+
+  # Whether the blast breaks blocks. Needs the mobGriefing game rule to be on
+  # (it is on by default).
+  break-blocks: false
+
+  # Whether the blast leaves fire behind.
+  set-fire: false
+
+  # How fast the fireball flies when thrown (blocks per tick).
+  speed: 1.5
+
+  # Seconds between throws. 0 = no limit.
+  cooldown: 0.25
+
+  # Whether you can hurt yourself with your own fireball. Keep this off if you
+  # use totem-mode, or your own blast will pop your totem or kill you.
+  hurt-self: false
+
+  # Whether players can punch (or shoot) your fireballs back at you.
+  can-be-deflected: false
+
+  # Fireballs that haven't hit anything after this many seconds disappear.
+  max-flight-seconds: 10
+
+  # Draw a flame trail behind each fireball. Bigger fireballs get a bigger trail.
+  trail: true
+
+# Upper limits for the /fireball commands, to avoid lag or typos.
+limits:
+  max-size: 20.0
+  max-damage: 1000.0
+  max-speed: 5.0
+
+# All messages use MiniMessage: https://docs.advntr.dev/minimessage/format.html
+messages:
+  prefix: "<gradient:#FF4E00:#FFB000><bold>Fireball</bold></gradient> <dark_gray>»</dark_gray> "
+  item-name: "<!italic><gradient:#FF4E00:#FFB000><bold>Infinite Fire Charge</bold></gradient>"
+  item-lore:
+    - "<!italic><gray>Right-click to throw a fireball."
+    - "<!italic><gray>It never runs out."
+  death-message: "<victim> was obliterated by <killer>'s fireball"

@@ -27,3 +27,10 @@ jobs:
           name: CrystallineResonance
           path: build/libs/*.jar
           if-no-files-found: error
+
+      - name: Upload InfiniteFireball jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: InfiniteFireball
+          path: infinite-fireball/build/libs/*.jar
+          if-no-files-found: error

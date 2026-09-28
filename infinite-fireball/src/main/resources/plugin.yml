@@ -1,0 +1,23 @@
+name: InfiniteFireball
+version: '${version}'
+main: dev.magicmagma.fireball.InfiniteFireball
+api-version: '1.21.11'
+description: '${description}'
+authors: [somethingenteryourname]
+website: https://github.com/somethingenteryourname-ui/magic-magma
+
+commands:
+  fireball:
+    description: Get the Infinite Fire Charge and change how its fireballs behave.
+    usage: /<command> help
+    aliases: [fb, infinitefireball]
+
+permissions:
+  infinitefireball.admin:
+    description: Use /fireball to get the fire charge and change its settings.
+    default: op
+    children:
+      infinitefireball.use: true
+  infinitefireball.use:
+    description: Throw fireballs with the Infinite Fire Charge.
+    default: true
