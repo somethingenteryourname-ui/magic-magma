@@ -518,6 +518,22 @@ public final class ToolListener implements Listener {
         }, 20L);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPickup(org.bukkit.event.entity.EntityPickupItemEvent event) {
+        if (event.getEntity() instanceof Player p && tools().toolOf(event.getItem().getItemStack()) == StaffTool.LUSTRE_SHARD) {
+            plugin.fx().playFor(p, "lustre-pickup");
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onHeld(org.bukkit.event.player.PlayerItemHeldEvent event) {
+        ItemStack next = event.getPlayer().getInventory().getItem(event.getNewSlot());
+        StaffTool t = tools().toolOf(next);
+        if (t != null && t.kit()) {
+            plugin.fx().playFor(event.getPlayer(), "tool-equip");
+        }
+    }
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         UUID id = event.getPlayer().getUniqueId();

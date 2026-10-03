@@ -115,6 +115,7 @@ public final class RewindEngine {
             }
             if (sender instanceof Player p) {
                 plugin.animations().rewindSweep(p.getLocation(), r);
+                plugin.fx().play("rewind-start", p.getLocation().add(0, 1, 0));
             }
             apply(sender, plan, who);
         }));

@@ -1,0 +1,290 @@
+{
+  "ui.click": {
+    "subtitle": "subtitles.shardwatch.ui.click",
+    "sounds": [
+      {
+        "name": "shardwatch:ui/click",
+        "volume": 1.0
+      }
+    ]
+  },
+  "ui.open": {
+    "subtitle": "subtitles.shardwatch.ui.open",
+    "sounds": [
+      {
+        "name": "shardwatch:ui/open",
+        "volume": 1.0
+      }
+    ]
+  },
+  "ui.page": {
+    "subtitle": "subtitles.shardwatch.ui.page",
+    "sounds": [
+      {
+        "name": "shardwatch:ui/page",
+        "volume": 1.0
+      }
+    ]
+  },
+  "ui.deny": {
+    "subtitle": "subtitles.shardwatch.ui.deny",
+    "sounds": [
+      {
+        "name": "shardwatch:ui/deny",
+        "volume": 1.0
+      }
+    ]
+  },
+  "ui.confirm": {
+    "subtitle": "subtitles.shardwatch.ui.confirm",
+    "sounds": [
+      {
+        "name": "shardwatch:ui/confirm",
+        "volume": 1.0
+      }
+    ]
+  },
+  "flare.send": {
+    "subtitle": "subtitles.shardwatch.flare.send",
+    "sounds": [
+      {
+        "name": "shardwatch:flare/send",
+        "volume": 1.0
+      }
+    ]
+  },
+  "flare.alert": {
+    "subtitle": "subtitles.shardwatch.flare.alert",
+    "sounds": [
+      {
+        "name": "shardwatch:flare/alert",
+        "volume": 1.0
+      }
+    ]
+  },
+  "flare.claim": {
+    "subtitle": "subtitles.shardwatch.flare.claim",
+    "sounds": [
+      {
+        "name": "shardwatch:flare/claim",
+        "volume": 1.0
+      }
+    ]
+  },
+  "flare.resolve": {
+    "subtitle": "subtitles.shardwatch.flare.resolve",
+    "sounds": [
+      {
+        "name": "shardwatch:flare/resolve",
+        "volume": 1.0
+      }
+    ]
+  },
+  "verdict.chip": {
+    "subtitle": "subtitles.shardwatch.verdict.chip",
+    "sounds": [
+      {
+        "name": "shardwatch:verdict/chip",
+        "volume": 1.0
+      }
+    ]
+  },
+  "verdict.hush": {
+    "subtitle": "subtitles.shardwatch.verdict.hush",
+    "sounds": [
+      {
+        "name": "shardwatch:verdict/hush",
+        "volume": 1.0
+      }
+    ]
+  },
+  "verdict.eject": {
+    "subtitle": "subtitles.shardwatch.verdict.eject",
+    "sounds": [
+      {
+        "name": "shardwatch:verdict/eject",
+        "volume": 1.0
+      }
+    ]
+  },
+  "verdict.encase": {
+    "subtitle": "subtitles.shardwatch.verdict.encase",
+    "sounds": [
+      {
+        "name": "shardwatch:verdict/encase",
+        "volume": 1.0
+      }
+    ]
+  },
+  "verdict.petrify": {
+    "subtitle": "subtitles.shardwatch.verdict.petrify",
+    "sounds": [
+      {
+        "name": "shardwatch:verdict/petrify",
+        "volume": 1.0
+      }
+    ]
+  },
+  "verdict.release": {
+    "subtitle": "subtitles.shardwatch.verdict.release",
+    "sounds": [
+      {
+        "name": "shardwatch:verdict/release",
+        "volume": 1.0
+      }
+    ]
+  },
+  "gavel.hit": {
+    "subtitle": "subtitles.shardwatch.gavel.hit",
+    "sounds": [
+      {
+        "name": "shardwatch:gavel/hit",
+        "volume": 1.0
+      }
+    ]
+  },
+  "echo.inspect": {
+    "subtitle": "subtitles.shardwatch.echo.inspect",
+    "sounds": [
+      {
+        "name": "shardwatch:echo/inspect",
+        "volume": 1.0
+      }
+    ]
+  },
+  "rewind.start": {
+    "subtitle": "subtitles.shardwatch.rewind.start",
+    "sounds": [
+      {
+        "name": "shardwatch:rewind/start",
+        "volume": 1.0
+      }
+    ]
+  },
+  "rewind.tick": {
+    "subtitle": "subtitles.shardwatch.rewind.tick",
+    "sounds": [
+      {
+        "name": "shardwatch:rewind/tick",
+        "volume": 1.0
+      }
+    ]
+  },
+  "rewind.done": {
+    "subtitle": "subtitles.shardwatch.rewind.done",
+    "sounds": [
+      {
+        "name": "shardwatch:rewind/done",
+        "volume": 1.0
+      }
+    ]
+  },
+  "glint.alert": {
+    "subtitle": "subtitles.shardwatch.glint.alert",
+    "sounds": [
+      {
+        "name": "shardwatch:glint/alert",
+        "volume": 1.0
+      }
+    ]
+  },
+  "veil.on": {
+    "subtitle": "subtitles.shardwatch.veil.on",
+    "sounds": [
+      {
+        "name": "shardwatch:veil/on",
+        "volume": 1.0
+      }
+    ]
+  },
+  "veil.off": {
+    "subtitle": "subtitles.shardwatch.veil.off",
+    "sounds": [
+      {
+        "name": "shardwatch:veil/off",
+        "volume": 1.0
+      }
+    ]
+  },
+  "compass.warp": {
+    "subtitle": "subtitles.shardwatch.compass.warp",
+    "sounds": [
+      {
+        "name": "shardwatch:compass/warp",
+        "volume": 1.0
+      }
+    ]
+  },
+  "monocle.focus": {
+    "subtitle": "subtitles.shardwatch.monocle.focus",
+    "sounds": [
+      {
+        "name": "shardwatch:monocle/focus",
+        "volume": 1.0
+      }
+    ]
+  },
+  "lustre.pickup": {
+    "subtitle": "subtitles.shardwatch.lustre.pickup",
+    "sounds": [
+      {
+        "name": "shardwatch:lustre/pickup",
+        "volume": 1.0
+      }
+    ]
+  },
+  "lustre.levelup": {
+    "subtitle": "subtitles.shardwatch.lustre.levelup",
+    "sounds": [
+      {
+        "name": "shardwatch:lustre/levelup",
+        "volume": 1.0
+      }
+    ]
+  },
+  "refine.upgrade": {
+    "subtitle": "subtitles.shardwatch.refine.upgrade",
+    "sounds": [
+      {
+        "name": "shardwatch:refine/upgrade",
+        "volume": 1.0
+      }
+    ]
+  },
+  "keepsake.claim": {
+    "subtitle": "subtitles.shardwatch.keepsake.claim",
+    "sounds": [
+      {
+        "name": "shardwatch:keepsake/claim",
+        "volume": 1.0
+      }
+    ]
+  },
+  "facet.promote": {
+    "subtitle": "subtitles.shardwatch.facet.promote",
+    "sounds": [
+      {
+        "name": "shardwatch:facet/promote",
+        "volume": 1.0
+      }
+    ]
+  },
+  "tool.equip": {
+    "subtitle": "subtitles.shardwatch.tool.equip",
+    "sounds": [
+      {
+        "name": "shardwatch:tool/equip",
+        "volume": 1.0
+      }
+    ]
+  },
+  "hum.ping": {
+    "subtitle": "subtitles.shardwatch.hum.ping",
+    "sounds": [
+      {
+        "name": "shardwatch:hum/ping",
+        "volume": 1.0
+      }
+    ]
+  }
+}

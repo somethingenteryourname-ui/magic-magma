@@ -50,6 +50,7 @@ public final class ConfirmMenu extends Menu {
                 plugin.lang().rawList("gui.confirm.summary.lore"), r));
         set(11, plugin.icons().button("confirm", "confirm.accept", r), e -> {
             close();
+            plugin.fx().playFor(viewer, "ui-confirm");
             if (plugin.verdicts().canJudge(viewer, target)) {
                 plugin.verdicts().issue(viewer, target, type, duration, reason, silent);
             }

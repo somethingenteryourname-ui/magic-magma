@@ -312,6 +312,35 @@ def chat_mockup():
     return img
 
 
+def sound_sheet():
+    """Waveform of every synthesised sound, with its event name and length."""
+    import soundfile as sf
+    files = sorted((NS / 'sounds').rglob('*.ogg'))
+    cols, cw, ch = 4, 300, 92
+    rows = math.ceil(len(files) / cols)
+    img = Image.new('RGBA', (cols * cw + 20, rows * ch + 60), BG)
+    d = ImageDraw.Draw(img)
+    d.text((12, 12), f'Custom sounds — {len(files)} synthesised .ogg files (mono, 44.1 kHz, Vorbis)', fill=INK, font=font(18))
+    for i, f in enumerate(files):
+        data, sr = sf.read(str(f))
+        x0, y0 = 10 + (i % cols) * cw, 50 + (i // cols) * ch
+        d.rectangle([x0, y0, x0 + cw - 12, y0 + ch - 12], fill=BG2)
+        w = cw - 24
+        mid = y0 + 44
+        step = max(1, len(data) // w)
+        for k in range(w):
+            seg = data[k * step:(k + 1) * step]
+            if len(seg) == 0:
+                break
+            a = float(abs(seg).max())
+            col = (0xF5, 0x9A, 0xC8) if k < w / 2 else (0x7F, 0xE8, 0xE0)
+            d.line([x0 + 6 + k, mid - a * 26, x0 + 6 + k, mid + a * 26], fill=col)
+        rel = str(f.relative_to(NS / 'sounds'))[:-4]
+        d.text((x0 + 6, y0 + 4), rel, fill=INK, font=font(12))
+        d.text((x0 + 6, y0 + ch - 28), f'{len(data) / sr:.2f}s', fill=MUTED, font=font(11))
+    return img
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for old in OUT.glob('*.png'):
@@ -336,6 +365,9 @@ def main():
     if (NS / 'textures' / 'font' / 'sigils.png').exists():
         chat_mockup().save(OUT / 'chat-sigils.png')
         made.append('chat-sigils.png')
+    if (NS / 'sounds').exists():
+        sound_sheet().save(OUT / 'sounds.png')
+        made.append('sounds.png')
     print('previews:', ', '.join(made))
 
 

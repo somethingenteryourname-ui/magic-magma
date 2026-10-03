@@ -100,7 +100,7 @@ public final class Shardwatch extends JavaPlugin {
         sigils = new SigilService(this);
 
         // Prompts first: a typed answer must be swallowed before any other chat handling.
-        listen(prompts, profiles, new VerdictListener(this), facets, echoes, glint, toolListener, new MenuListener(), lustre);
+        listen(prompts, fx, profiles, new VerdictListener(this), facets, echoes, glint, toolListener, new MenuListener(), lustre);
         Bukkit.getScheduler().runTaskTimer(this, new AuraTask(this), 40L, 3L);
 
         VerdictCommands verdictCommands = new VerdictCommands(this);

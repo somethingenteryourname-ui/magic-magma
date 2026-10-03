@@ -110,10 +110,7 @@ permissions:
       shardwatch.admin.reload: true
       shardwatch.admin.give: true
       shardwatch.admin.lustre: true
-      shardwatch.admin.lustre:
-    description: /sw lustre add|take and viewing others' Lustre.
-    default: op
-  shardwatch.kit: true
+      shardwatch.kit: true
       shardwatch.tool.*: true
   shardwatch.staff:
     description: Marks a player as staff (Hum, staff counts).

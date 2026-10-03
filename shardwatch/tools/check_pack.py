@@ -66,8 +66,8 @@ def has_pink_and_teal(img):
 
 
 def outline_share(img):
-    a = img[..., 3] > 0
-    edge = a & ~(np.roll(a, 1, 0) & np.roll(a, -1, 0) & np.roll(a, 1, 1) & np.roll(a, -1, 1))
+    a = np.pad(img[..., 3] > 0, 1)  # pad so the canvas border counts as outside (np.roll would wrap around)
+    edge = (a & ~(np.roll(a, 1, 0) & np.roll(a, -1, 0) & np.roll(a, 1, 1) & np.roll(a, -1, 1)))[1:-1, 1:-1]
     cols = img[..., :3][edge]
     if len(cols) == 0:
         return 0.0
@@ -279,18 +279,36 @@ def check_sounds():
                 if not (NS / 'sounds' / f'{path}.ogg').exists():
                     problems.append(f'{name}: {path}.ogg missing')
     cfg = (ROOT / 'src' / 'main' / 'resources' / 'config.yml').read_text()
-    for key in sorted(set(re.findall(r'shardwatch:([a-z0-9_.]+)', cfg))):
-        if key.startswith(('item/', 'particle/', 'crystal')):
-            continue
+    # Sound layers look like "shardwatch:event.name volume pitch"; fonts/models in comments don't.
+    for key in sorted(set(re.findall(r'"shardwatch:([a-z0-9_.]+) [0-9.]', cfg))):
         if key not in events:
             problems.append(f'config.yml uses sound shardwatch:{key}, not in sounds.json')
+    return problems
+
+
+def check_presets():
+    """Every effect preset needs a custom pack sound, and every custom sound event must be used by a preset."""
+    import yaml
+    cfg = yaml.safe_load((ROOT / 'src' / 'main' / 'resources' / 'config.yml').read_text())
+    presets = cfg.get('fx', {}).get('presets', {})
+    problems = []
+    used = set()
+    for name, p in presets.items():
+        custom = [l.split()[0] for l in (p.get('sounds') or []) if l.startswith('shardwatch:')]
+        if not custom:
+            problems.append(f'fx preset {name} has no custom shardwatch: sound')
+        used |= {c.split(':', 1)[1] for c in custom}
+    for stage, names in A.SOUNDS.items():
+        for n in names:
+            if n not in used:
+                problems.append(f'sound event shardwatch:{n} is not used by any fx preset')
     return problems
 
 
 def check_particles():
     problems = []
     cfg = (ROOT / 'src' / 'main' / 'resources' / 'config.yml').read_text()
-    used = set(re.findall(r'ITEM:shardwatch:([a-z_/]+)', cfg))
+    used = set(re.findall(r'"ITEM [^"]*shardwatch:([a-z_/]+)"', cfg))
     for p in A.PARTICLES:
         if p.id not in {u.split('/')[-1] for u in used}:
             problems.append(f'{p.id} is not used by any fx preset yet')
@@ -361,6 +379,7 @@ def run(stage: int) -> tuple[str, int]:
     if stage >= 5:
         glob += [f'sounds: {e}' for e in check_sounds()]
         glob += [f'particles: {e}' for e in check_particles()]
+        glob += [f'presets: {e}' for e in check_presets()]
     lines += ['## Pack-wide checks', '']
     if glob:
         lines += [f'- ❌ {g}' for g in glob]

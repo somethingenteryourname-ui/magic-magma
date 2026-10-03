@@ -24,6 +24,20 @@ class LangKeysTest {
     private static final Pattern BUTTON = Pattern.compile("icons\\(\\)\\.button\\(\"[a-z_]+\",\\s*([^,)]+)");
     private static final Pattern KEY = Pattern.compile("\"([a-z][a-z0-9_\\-]*(?:\\.[a-z0-9_\\-]+)+)\"");
 
+    /** A repeated key silently replaces the earlier one, so whole config sections can vanish. */
+    @Test
+    void noDuplicateKeys() throws IOException {
+        org.yaml.snakeyaml.LoaderOptions options = new org.yaml.snakeyaml.LoaderOptions();
+        options.setAllowDuplicateKeys(false);
+        for (String f : List.of("src/main/resources/lang.yml", "src/main/resources/config.yml", "src/main/resources/plugin.yml")) {
+            try (InputStream in = Files.newInputStream(Path.of(f))) {
+                new Yaml(options).load(in);
+            } catch (org.yaml.snakeyaml.constructor.DuplicateKeyException e) {
+                throw new AssertionError(f + ": " + e.getMessage(), e);
+            }
+        }
+    }
+
     /** YAML 1.1 (Bukkit's loader) turns these keys into booleans, so they can never be looked up by name. */
     @Test
     void noBooleanLikeKeys() throws IOException {
