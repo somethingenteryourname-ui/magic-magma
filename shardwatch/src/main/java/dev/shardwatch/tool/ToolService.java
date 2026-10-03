@@ -126,6 +126,12 @@ public final class ToolService {
         return plugin.getConfig().getInt("tools." + tool.id() + ".cooldown-ticks", 10);
     }
 
+    /** Cooldown after Refinements: {@code progression.refinements.<id>.cooldown-ticks: [t1, t2, t3]} when set. */
+    public int cooldown(Player p, StaffTool tool) {
+        int refined = plugin.lustre().bonus(p, tool.id(), "cooldown-ticks");
+        return refined > 0 ? refined : cooldown(tool);
+    }
+
     public Key cooldownGroup(StaffTool tool) {
         return Key.key("shardwatch", tool.id());
     }

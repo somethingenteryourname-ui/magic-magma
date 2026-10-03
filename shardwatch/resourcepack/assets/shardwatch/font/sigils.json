@@ -1,0 +1,14 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "shardwatch:font/sigils.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\ue100\ue101\ue102\ue103",
+        "\ue104\ue105\ue106\ue107"
+      ]
+    }
+  ]
+}

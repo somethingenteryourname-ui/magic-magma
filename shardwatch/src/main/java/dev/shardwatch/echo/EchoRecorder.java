@@ -299,7 +299,7 @@ public final class EchoRecorder implements Listener {
 
     /** Shows one page of a block's history in chat. */
     public void inspect(Player p, Location loc, int page) {
-        int perPage = plugin.getConfig().getInt("echoes.inspect-page-size", 7);
+        int perPage = plugin.getConfig().getInt("echoes.inspect-page-size", 7) + plugin.lustre().bonus(p, "echo_lens", "page-bonus");
         lastInspected.put(p.getUniqueId(), loc.clone());
         int pg = Math.max(1, page);
         store.at(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), perPage + 1, (pg - 1) * perPage)

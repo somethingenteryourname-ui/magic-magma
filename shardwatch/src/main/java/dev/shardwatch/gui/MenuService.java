@@ -6,6 +6,9 @@ import dev.shardwatch.gui.menus.ConsoleMenu;
 import dev.shardwatch.gui.menus.FlareBoardMenu;
 import dev.shardwatch.gui.menus.FlareCreateMenu;
 import dev.shardwatch.gui.menus.GlintMenu;
+import dev.shardwatch.gui.menus.KeepsakeMenu;
+import dev.shardwatch.gui.menus.LustreMenu;
+import dev.shardwatch.gui.menus.RefineMenu;
 import dev.shardwatch.gui.menus.LedgerMenu;
 import dev.shardwatch.gui.menus.PlayerPickMenu;
 import dev.shardwatch.gui.menus.RewindMenu;
@@ -82,7 +85,29 @@ public class MenuService {
         show(new RewindMenu(plugin, p));
     }
 
-    /** Buttons other stages add to the Crystal Console. */
+    public void openLustre(Player p) {
+        plugin.profiles().top(7).thenAccept(top -> show(new LustreMenu(plugin, p, top)));
+    }
+
+    public void openRefine(Player p) {
+        show(new RefineMenu(plugin, p));
+    }
+
+    public void openKeepsakes(Player p) {
+        show(new KeepsakeMenu(plugin, p, plugin.lustre().keepsakes()));
+    }
+
+    /** Progression buttons on the Crystal Console. */
     public void consoleExtras(ConsoleMenu menu, Player viewer) {
+        if (!plugin.lustre().enabled()) {
+            return;
+        }
+        var prof = plugin.profiles().get(viewer);
+        int level = plugin.lustre().level(prof.lifetime());
+        menu.place(38, plugin.icons().amount(plugin.icons().button("lustre", "console.lustre",
+                dev.shardwatch.util.Text.p("lustre", prof.lustre()),
+                dev.shardwatch.util.Text.p("clarity", plugin.lustre().clarity(level)),
+                dev.shardwatch.util.Text.pp("bar", plugin.lustre().bar(prof.lifetime()))), level), () -> openLustre(viewer));
+        menu.place(42, plugin.icons().button("keepsake", "console.keepsakes"), () -> openKeepsakes(viewer));
     }
 }

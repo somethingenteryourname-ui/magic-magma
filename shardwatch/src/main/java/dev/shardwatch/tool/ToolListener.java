@@ -96,7 +96,7 @@ public final class ToolListener implements Listener {
                     return;
                 }
                 Block target = right ? clicked.getRelative(event.getBlockFace()) : clicked;
-                tools().startCooldown(p, tool, tools().cooldown(tool));
+                tools().startCooldown(p, tool, tools().cooldown(p, tool));
                 plugin.fx().play("lens-focus", target.getLocation().add(0.5, 0.5, 0.5));
                 plugin.echoes().inspect(p, target.getLocation(), 1);
             }
@@ -114,7 +114,7 @@ public final class ToolListener implements Listener {
                 if (!right || !allowed(p, tool) || tools().onCooldown(p, tool)) {
                     return;
                 }
-                tools().startCooldown(p, tool, tools().cooldown(tool));
+                tools().startCooldown(p, tool, tools().cooldown(p, tool));
                 boolean on = !plugin.facets().isVeiled(p);
                 plugin.facets().setVeil(p, on);
                 tools().setLanternLit(item, on);
@@ -123,14 +123,14 @@ public final class ToolListener implements Listener {
                 if (!right || !allowed(p, tool) || tools().onCooldown(p, tool)) {
                     return;
                 }
-                tools().startCooldown(p, tool, tools().cooldown(tool));
+                tools().startCooldown(p, tool, tools().cooldown(p, tool));
                 useCompass(p, item, p.isSneaking());
             }
             case GLINT_MONOCLE -> {
                 if (!right || !allowed(p, tool) || tools().onCooldown(p, tool)) {
                     return;
                 }
-                tools().startCooldown(p, tool, tools().cooldown(tool));
+                tools().startCooldown(p, tool, tools().cooldown(p, tool));
                 if (p.isSneaking()) {
                     plugin.lang().send(p, plugin.glint().unwatch(p) ? "glint.unwatched" : "glint.not-watching");
                 } else {
@@ -182,7 +182,7 @@ public final class ToolListener implements Listener {
             if (!allowed(p, tool) || tools().onCooldown(p, tool)) {
                 return;
             }
-            tools().startCooldown(p, tool, tools().cooldown(tool));
+            tools().startCooldown(p, tool, tools().cooldown(p, tool));
             plugin.verdicts().togglePetrify(p, target);
         } else if (tool == StaffTool.VERDICT_GAVEL) {
             event.setCancelled(true);
@@ -209,7 +209,7 @@ public final class ToolListener implements Listener {
         if (!allowed(p, StaffTool.VERDICT_GAVEL) || tools().onCooldown(p, StaffTool.VERDICT_GAVEL)) {
             return;
         }
-        tools().startCooldown(p, StaffTool.VERDICT_GAVEL, tools().cooldown(StaffTool.VERDICT_GAVEL));
+        tools().startCooldown(p, StaffTool.VERDICT_GAVEL, tools().cooldown(p, StaffTool.VERDICT_GAVEL));
         lastGavelTarget.put(p.getUniqueId(), target.getUniqueId());
         plugin.fx().play("gavel-hit", target.getLocation().add(0, 1.2, 0));
         if (plugin.getConfig().getBoolean("gui.enabled", true)) {
@@ -249,7 +249,7 @@ public final class ToolListener implements Listener {
                 Text.p("x", loc.getBlockX()), Text.p("y", loc.getBlockY()), Text.p("z", loc.getBlockZ()));
         plugin.fx().playFor(p, "timeglass-mark", loc.clone().add(0.5, 1, 0.5));
         if (sel[0] != null && sel[1] != null) {
-            int max = plugin.getConfig().getInt("rewind.max-radius", 60) * 2 + 1;
+            int max = plugin.getConfig().getInt("rewind.max-radius", 60) * 2 + 1 + plugin.lustre().bonus(p, "timeglass", "area-bonus");
             int dx = Math.abs(sel[0].getBlockX() - sel[1].getBlockX()) + 1;
             int dy = Math.abs(sel[0].getBlockY() - sel[1].getBlockY()) + 1;
             int dz = Math.abs(sel[0].getBlockZ() - sel[1].getBlockZ()) + 1;

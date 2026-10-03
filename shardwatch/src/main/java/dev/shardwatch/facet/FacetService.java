@@ -206,7 +206,7 @@ public final class FacetService implements Listener {
         String format = plugin.getConfig().getString("facets.chat-format.format",
                 "<facet_prefix> <name_color><name></name_color> <muted>»</muted> <message>");
         event.renderer((source, displayName, message, viewer) -> plugin.lang().parse(format,
-                Text.pc("sigil", Component.empty()),
+                Text.pc("sigil", plugin.sigils().component(source)),
                 Text.pp("facet_prefix", f.prefix()),
                 Text.pc("name", displayName),
                 TagResolver.resolver("name_color", net.kyori.adventure.text.minimessage.tag.Tag.styling(

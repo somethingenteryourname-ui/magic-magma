@@ -64,14 +64,14 @@ public final class EchoCommands extends BaseCommand {
                 plugin.lang().send(p, "tools.timeglass-no-selection");
                 return true;
             }
-            int max = plugin.getConfig().getInt("rewind.max-radius", 60) * 2 + 1;
+            int max = plugin.getConfig().getInt("rewind.max-radius", 60) * 2 + 1 + plugin.lustre().bonus(p, "timeglass", "area-bonus");
             if ((req.maxX() - req.minX() + 1 > max || req.maxY() - req.minY() + 1 > max || req.maxZ() - req.minZ() + 1 > max)
                     && !p.hasPermission("shardwatch.rewind.global")) {
                 plugin.lang().send(p, "rewind.radius-too-big", Text.p("max", max));
                 return true;
             }
             if (!preview) {
-                plugin.toolListener().drainTimeglass(p, plugin.getConfig().getInt("tools.timeglass.cooldown-ticks", 100));
+                plugin.toolListener().drainTimeglass(p, plugin.tools().cooldown(p, dev.shardwatch.tool.StaffTool.TIMEGLASS));
             }
             plugin.rewind().run(p, req, preview);
             return true;

@@ -41,6 +41,7 @@ usage:
   glint: "<prefix><muted>Usage: <teal>/<label> [list|suspects|check|tp|watch|unwatch|handle] [player|id]"
   facet: "<prefix><muted>Usage: <teal>/<label> set <player> <facet|none>"
   give: "<prefix><muted>Usage: <pink>/<label> give <player> <tool> [tier|facet] [amount]"
+  lustre: "<prefix><muted>Usage: <pink>/<label> lustre [player|top]</pink> or <pink>/<label> lustre add|take <player> <amount>"
 
 # ─────────────────────────────────────────── Verdicts
 verdict:
@@ -427,6 +428,30 @@ gui:
     veil: {name: "<pink><b>Veil</b> <state>", lore: ["<muted>Click to toggle vanish."]}
     hum: {name: "<ice><b>Hum mode", lore: ["<muted>Route your chat to staff only.", "<muted>Click to toggle."]}
     settings: {name: "<muted><b>Settings", lore: ["<muted>Alerts, effects, inspect mode."]}
+    lustre: {name: "<pink><b>Lustre</b> <muted>· <clarity>", lore: ["<pink><lustre></pink> <muted>to spend", "<bar>", "", "<teal>Click for Refinements and Keepsakes"]}
+    keepsakes: {name: "<rose><b>Keepsakes", lore: ["<muted>Auras, chat sigils, shard bundles."]}
+  lustre:
+    title: "<#55305F><b>✦ Lustre"
+    overview: {name: "<pink><b><clarity>", lore: ["<muted>Spendable:</muted> <pink><lustre>", "<muted>Lifetime:</muted> <white><lifetime>", "<bar>", "<muted><next> to the next level", "<muted>Today: <today>/<cap>"]}
+    refine: {name: "<teal><b>Refinements", lore: ["<muted>Upgrade your tools to tier II and III."]}
+    keepsakes: {name: "<rose><b>Keepsakes", lore: ["<muted>Auras, chat sigils, shard bundles."]}
+    shards: {name: "<pink>Lustre Shards", lore: ["<muted>Each one is worth <value> Lustre.", "<muted>Right-click to absorb; sneak for the stack."]}
+    top-name: "<gold><b>Brightest staff"
+  refine:
+    title: "<#55305F><b>✦ Refinements"
+    ready: ["<muted>Tier <tier> → <pink><next>", "<muted>Cost:</muted> <pink><cost></pink> <muted>(you have <lustre>)", "", "<ok>Click to refine"]
+    poor: ["<muted>Tier <tier> → <next>", "<muted>Cost:</muted> <bad><cost></bad> <muted>(you have <lustre>)"]
+    locked: ["<muted>Tier <tier> → <next>", "<bad>Needs Clarity level <level>"]
+    max: ["<ok>Tier <tier> — fully refined"]
+    no-access: ["<muted>Your Facet can't use this tool."]
+  keepsakes:
+    title: "<#55305F><b>✦ Keepsakes"
+    types: {aura: "<pink>Aura", sigil: "<teal>Chat sigil", shards: "<ice>Bundle"}
+    locked: ["", "<type>", "<bad>Needs Clarity level <level>"]
+    claimable: ["", "<type>", "<muted>Cost:</muted> <pink><cost> Lustre", "<ok>Click to claim"]
+    owned: ["", "<type>", "<teal>Click to use"]
+    active: ["", "<type>", "<ok>✔ in use</ok> <muted>— click to turn off"]
+    balance: {name: "<pink><lustre> Lustre", lore: ["<muted>Earn more by handling Flares and verdicts."]}
   flares:
     title: "<#55305F><b>✦ Flare Board</b> <#8F6596>open"
     title-all: "<#55305F><b>✦ Flare Board</b> <#8F6596>all"
@@ -531,6 +556,29 @@ gui:
     preview: {name: "<teal><b>Preview", lore: ["<muted><source> · <time> · r<radius>", "<muted>Shows shimmering blocks first."]}
     run: {name: "<ok><b>Rewind", lore: ["<muted><source> · <time> · r<radius>"]}
     undo: {name: "<bad>Undo last rewind", lore: []}
+
+# ─────────────────────────────────────────── Lustre & Keepsakes
+lustre:
+  gained: "<pink>✦ +<amount> Lustre</pink> <muted>(<why>) · <total>"
+  level-up: "<prefix><gradient:#F59AC8:#7FE8E0><b>✦ <clarity>!</b></gradient> <muted>Your facets catch more light."
+  level-up-staff: "<prefix><muted><player> reached <pink><clarity></pink>."
+  keepsake-unlocked: "<prefix><pink>✦ Keepsake unlocked:</pink> <keepsake>"
+  keepsake-claimed: "<prefix><ok>✦ Claimed</ok> <keepsake>"
+  keepsake-level: "<prefix><bad>Reach Clarity level <level> first."
+  aura-on: "<prefix><keepsake> <ok>on"
+  aura-off: "<prefix><keepsake> <muted>off"
+  sigil-on: "<prefix><keepsake> <ok>shown in chat"
+  sigil-off: "<prefix><keepsake> <muted>hidden"
+  refine-max: "<prefix><muted>That tool is fully refined."
+  refine-level: "<prefix><bad>Reach Clarity level <level> first."
+  refine-cost: "<prefix><bad>You need <cost> Lustre."
+  refined: "<prefix><ok>✦ <tool> refined to tier <tier>!"
+  shard-staff-only: "<prefix><muted>Only staff can absorb Lustre."
+  info: "<prefix><white><player></white> <muted>·</muted> <pink><lustre> Lustre</pink> <muted>(lifetime <lifetime>) ·</muted> <clarity> <bar>"
+  top-header: "<prefix><gradient:#F59AC8:#7FE8E0><b>Brightest staff</b></gradient>"
+  top-row: "  <muted><rank>.</muted> <white><player></white> <pink><lifetime>"
+  adjusted: "<prefix><ok><player> now has <total> Lustre."
+  not-enough: "<prefix><bad><player> doesn't have that much Lustre."
 
 admin:
   reloaded: "<prefix><ok>Reloaded in <ms> ms."

@@ -23,6 +23,9 @@ import dev.shardwatch.gui.Icons;
 import dev.shardwatch.gui.MenuListener;
 import dev.shardwatch.gui.MenuService;
 import dev.shardwatch.profile.ProfileService;
+import dev.shardwatch.progress.AuraTask;
+import dev.shardwatch.progress.LustreService;
+import dev.shardwatch.progress.SigilService;
 import dev.shardwatch.scope.ScopeViewer;
 import dev.shardwatch.storage.Database;
 import dev.shardwatch.storage.LogStore;
@@ -62,6 +65,8 @@ public final class Shardwatch extends JavaPlugin {
     private Icons icons;
     private MenuService menus;
     private ChatPrompt prompts;
+    private LustreService lustre;
+    private SigilService sigils;
 
     @Override
     public void onEnable() {
@@ -91,9 +96,12 @@ public final class Shardwatch extends JavaPlugin {
         icons = new Icons(this);
         menus = createMenus();
         prompts = new ChatPrompt(this);
+        lustre = new LustreService(this);
+        sigils = new SigilService(this);
 
         // Prompts first: a typed answer must be swallowed before any other chat handling.
-        listen(prompts, profiles, new VerdictListener(this), facets, echoes, glint, toolListener, new MenuListener());
+        listen(prompts, profiles, new VerdictListener(this), facets, echoes, glint, toolListener, new MenuListener(), lustre);
+        Bukkit.getScheduler().runTaskTimer(this, new AuraTask(this), 40L, 3L);
 
         VerdictCommands verdictCommands = new VerdictCommands(this);
         for (String c : new String[]{"chip", "hush", "unhush", "eject", "encase", "unencase", "petrify"}) {
@@ -285,5 +293,13 @@ public final class Shardwatch extends JavaPlugin {
 
     public ChatPrompt prompts() {
         return prompts;
+    }
+
+    public LustreService lustre() {
+        return lustre;
+    }
+
+    public SigilService sigils() {
+        return sigils;
     }
 }

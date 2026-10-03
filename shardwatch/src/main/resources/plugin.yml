@@ -12,7 +12,7 @@ commands:
   shardwatch:
     description: Shardwatch hub — help, menu, kit, give, reload.
     aliases: [sw]
-    usage: /<command> [help|kit|give|reload|version]
+    usage: /<command> [menu|settings|kit|give|lustre|refine|keepsakes|reload|version]
   flare:
     description: Send a Flare (report) about a player.
     aliases: [report]
@@ -109,7 +109,11 @@ permissions:
       shardwatch.exempt.bypass: true
       shardwatch.admin.reload: true
       shardwatch.admin.give: true
-      shardwatch.kit: true
+      shardwatch.admin.lustre: true
+      shardwatch.admin.lustre:
+    description: /sw lustre add|take and viewing others' Lustre.
+    default: op
+  shardwatch.kit: true
       shardwatch.tool.*: true
   shardwatch.staff:
     description: Marks a player as staff (Hum, staff counts).
@@ -276,6 +280,9 @@ permissions:
     default: op
   shardwatch.admin.give:
     description: /sw give
+    default: op
+  shardwatch.admin.lustre:
+    description: /sw lustre add|take and viewing others' Lustre.
     default: op
   shardwatch.kit:
     description: /sw kit — receive the tools your permissions allow.

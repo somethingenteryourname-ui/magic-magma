@@ -113,6 +113,43 @@ public class Animations {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
+    /** Rising rings on a Clarity level-up. */
+    public void levelUp(Player p) {
+        if (!on()) {
+            return;
+        }
+        new BukkitRunnable() {
+            int t;
+
+            @Override
+            public void run() {
+                if (!p.isOnline() || t++ > 30) {
+                    cancel();
+                    return;
+                }
+                ring(p.getLocation().add(0, t * 0.08, 0), 0.9 - t * 0.02, 12, Color.fromRGB(0xF59AC8), Color.fromRGB(0x7FE8E0));
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
+    }
+
+    /** A quick double ring when a tool is refined. */
+    public void refine(Player p) {
+        if (!on()) {
+            return;
+        }
+        ring(p.getLocation().add(0, 1.0, 0), 0.7, 16, Color.fromRGB(0x7FE8E0), Color.WHITE);
+        ring(p.getLocation().add(0, 1.4, 0), 0.5, 12, Color.fromRGB(0xF59AC8), Color.WHITE);
+    }
+
+    /** Sparkles bursting from a redeemed Lustre Shard. */
+    public void shardBurst(Player p) {
+        if (!on()) {
+            return;
+        }
+        p.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, p.getLocation().add(0, 1.2, 0), 24, 0.4, 0.4, 0.4, 0,
+                new Particle.DustTransition(Color.fromRGB(0xF59AC8), Color.fromRGB(0x7FE8E0), 1.1f));
+    }
+
     /** Removes anything left behind (display entities in later stages). */
     public void shutdown() {
     }

@@ -280,6 +280,38 @@ def menu_mockup():
     return canvas
 
 
+def chat_mockup():
+    """How chat sigils look: the 8 glyphs, then sample chat lines with a sigil before each staff name."""
+    atlas = Image.open(NS / 'textures' / 'font' / 'sigils.png').convert('RGBA')
+    names = ['Shardling', 'Prismkeeper', 'Lumenwarden', 'Crownfacet', 'Heart', 'Star', 'Moon', 'Bloom']
+    img = Image.new('RGBA', (900, 430), BG)
+    d = ImageDraw.Draw(img)
+    d.text((16, 10), 'Chat sigils (shardwatch:sigils font, 16×16 glyphs shown at 4×)', fill=INK, font=font(18))
+    for i in range(8):
+        g = atlas.crop(((i % 4) * 16, (i // 4) * 16, (i % 4) * 16 + 16, (i // 4) * 16 + 16)).resize((64, 64), Image.NEAREST)
+        img.alpha_composite(g, (16 + i * 108, 44))
+        d.text((16 + i * 108, 112), names[i], fill=MUTED, font=font(13))
+    lines = [(0, 'Shardling', (0x7F, 0xE8, 0xE0), 'Mira', 'anyone seen the flare at spawn?'),
+             (1, 'Prismkeeper', (0xF5, 0x9A, 0xC8), 'Juniper', 'claimed it, heading there now'),
+             (2, 'Lumenwarden', (0xB7, 0xF2, 0xFF), 'Ash', 'rewound 214 blocks near the bridge'),
+             (3, 'Crownfacet', (0xFF, 0xC7, 0xE6), 'Rowan', 'thanks all, great work today'),
+             (6, 'Prismkeeper', (0xF5, 0x9A, 0xC8), 'Kit', '(using the Moon keepsake sigil)')]
+    y = 150
+    chat_bg = Image.new('RGBA', (868, 52 * len(lines) + 16), (0, 0, 0, 110))
+    img.alpha_composite(chat_bg, (16, y - 8))
+    for idx, rank, col, name, msg in lines:
+        g = atlas.crop(((idx % 4) * 16, (idx // 4) * 16, (idx % 4) * 16 + 16, (idx // 4) * 16 + 16)).resize((36, 36), Image.NEAREST)
+        img.alpha_composite(g, (28, y))
+        f = font(22)
+        d.text((72, y + 4), f'[{rank}]', fill=col, font=f)
+        w = d.textlength(f'[{rank}] ', font=f)
+        d.text((72 + w, y + 4), name, fill=col, font=f)
+        w2 = d.textlength(name + ' ', font=f)
+        d.text((72 + w + w2, y + 4), '» ' + msg, fill=(235, 235, 235), font=f)
+        y += 52
+    return img
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for old in OUT.glob('*.png'):
@@ -301,6 +333,9 @@ def main():
     if (NS / 'textures' / 'font' / 'menu_6.png').exists():
         menu_mockup().save(OUT / 'menu-console.png')
         made.append('menu-console.png')
+    if (NS / 'textures' / 'font' / 'sigils.png').exists():
+        chat_mockup().save(OUT / 'chat-sigils.png')
+        made.append('chat-sigils.png')
     print('previews:', ', '.join(made))
 
 
