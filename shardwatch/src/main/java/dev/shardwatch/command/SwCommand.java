@@ -24,8 +24,22 @@ public final class SwCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String @NotNull [] args) {
-        String sub = args.length == 0 ? "help" : args[0].toLowerCase(Locale.ROOT);
+        String sub = args.length == 0 ? (sender instanceof Player ? "menu" : "help") : args[0].toLowerCase(Locale.ROOT);
         switch (sub) {
+            case "menu", "console" -> {
+                Player p = requirePlayer(sender);
+                if (p != null && p.hasPermission("shardwatch.staff")) {
+                    plugin.menus().openConsole(p);
+                } else {
+                    plugin.lang().getLines("help").forEach(sender::sendMessage);
+                }
+            }
+            case "settings" -> {
+                Player p = requirePlayer(sender);
+                if (p != null && has(p, "shardwatch.staff")) {
+                    plugin.menus().openSettings(p);
+                }
+            }
             case "reload" -> {
                 if (!has(sender, "shardwatch.admin.reload")) {
                     return true;
@@ -102,7 +116,7 @@ public final class SwCommand extends BaseCommand {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String @NotNull [] args) {
         if (args.length == 1) {
-            return filter(List.of("help", "kit", "give", "reload", "version"), args[0]);
+            return filter(List.of("menu", "settings", "help", "kit", "give", "reload", "version"), args[0]);
         }
         if (!args[0].equalsIgnoreCase("give")) {
             return List.of();

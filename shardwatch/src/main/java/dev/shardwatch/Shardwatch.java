@@ -18,6 +18,10 @@ import dev.shardwatch.flare.FlareService;
 import dev.shardwatch.fx.Animations;
 import dev.shardwatch.fx.Fx;
 import dev.shardwatch.glint.GlintTracker;
+import dev.shardwatch.gui.ChatPrompt;
+import dev.shardwatch.gui.Icons;
+import dev.shardwatch.gui.MenuListener;
+import dev.shardwatch.gui.MenuService;
 import dev.shardwatch.profile.ProfileService;
 import dev.shardwatch.scope.ScopeViewer;
 import dev.shardwatch.storage.Database;
@@ -55,6 +59,9 @@ public final class Shardwatch extends JavaPlugin {
     private ScopeViewer scope;
     private ToolService tools;
     private ToolListener toolListener;
+    private Icons icons;
+    private MenuService menus;
+    private ChatPrompt prompts;
 
     @Override
     public void onEnable() {
@@ -81,8 +88,12 @@ public final class Shardwatch extends JavaPlugin {
         scope = new ScopeViewer(this);
         tools = new ToolService(this);
         toolListener = new ToolListener(this);
+        icons = new Icons(this);
+        menus = createMenus();
+        prompts = new ChatPrompt(this);
 
-        listen(profiles, new VerdictListener(this), facets, echoes, glint, toolListener);
+        // Prompts first: a typed answer must be swallowed before any other chat handling.
+        listen(prompts, profiles, new VerdictListener(this), facets, echoes, glint, toolListener, new MenuListener());
 
         VerdictCommands verdictCommands = new VerdictCommands(this);
         for (String c : new String[]{"chip", "hush", "unhush", "eject", "encase", "unencase", "petrify"}) {
@@ -257,5 +268,22 @@ public final class Shardwatch extends JavaPlugin {
 
     public ToolListener toolListener() {
         return toolListener;
+    }
+
+    /** The menu service; later stages extend it with more menus. */
+    private MenuService createMenus() {
+        return new MenuService(this);
+    }
+
+    public Icons icons() {
+        return icons;
+    }
+
+    public MenuService menus() {
+        return menus;
+    }
+
+    public ChatPrompt prompts() {
+        return prompts;
     }
 }

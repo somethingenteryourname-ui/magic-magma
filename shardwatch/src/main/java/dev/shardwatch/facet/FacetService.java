@@ -274,7 +274,7 @@ public final class FacetService implements Listener {
             }
         }
         plugin.fx().play(on ? "veil-on" : "veil-off", p.getLocation().add(0, 1, 0));
-        plugin.lang().send(p, on ? "veil.on" : "veil.off");
+        plugin.lang().send(p, on ? "veil.enabled" : "veil.disabled");
         plugin.lang().send(Players.withPermission("shardwatch.veil.see"), on ? "veil.staff-on" : "veil.staff-off",
                 Text.p("player", p.getName()));
         plugin.action(p, on ? StaffAction.VEIL_ON : StaffAction.VEIL_OFF, p.getName(), "");

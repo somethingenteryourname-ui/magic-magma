@@ -1,0 +1,43 @@
+{
+  "providers": [
+    {
+      "type": "space",
+      "advances": {
+        "\uf801": -1,
+        "\uf821": 1,
+        "\uf802": -2,
+        "\uf822": 2,
+        "\uf803": -4,
+        "\uf823": 4,
+        "\uf804": -8,
+        "\uf824": 8,
+        "\uf805": -16,
+        "\uf825": 16,
+        "\uf806": -32,
+        "\uf826": 32,
+        "\uf807": -64,
+        "\uf827": 64,
+        "\uf808": -128,
+        "\uf828": 128
+      }
+    },
+    {
+      "type": "bitmap",
+      "file": "shardwatch:font/menu_6.png",
+      "ascent": 13,
+      "height": 222,
+      "chars": [
+        "\ue000"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "shardwatch:font/menu_3.png",
+      "ascent": 13,
+      "height": 168,
+      "chars": [
+        "\ue001"
+      ]
+    }
+  ]
+}

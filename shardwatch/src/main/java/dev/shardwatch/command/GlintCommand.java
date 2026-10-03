@@ -29,8 +29,14 @@ public final class GlintCommand extends BaseCommand {
         if (!has(sender, "shardwatch.glint")) {
             return true;
         }
-        String sub = args.length == 0 ? "list" : args[0].toLowerCase();
+        String sub = args.length == 0 ? (sender instanceof Player ? "menu" : "list") : args[0].toLowerCase();
         switch (sub) {
+            case "menu" -> {
+                Player p = requirePlayer(sender);
+                if (p != null) {
+                    plugin.menus().openGlint(p, 0);
+                }
+            }
             case "check" -> {
                 if (args.length < 2) {
                     plugin.lang().send(sender, "usage.glint", Text.p("label", label));
@@ -112,7 +118,7 @@ public final class GlintCommand extends BaseCommand {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String @NotNull [] args) {
         if (args.length == 1) {
-            return filter(List.of("list", "suspects", "check", "tp", "watch", "unwatch", "handle"), args[0]);
+            return filter(List.of("menu", "list", "suspects", "check", "tp", "watch", "unwatch", "handle"), args[0]);
         }
         if (args.length == 2 && List.of("check", "tp", "watch").contains(args[0].toLowerCase())) {
             return Players.onlineNames(args[1]);

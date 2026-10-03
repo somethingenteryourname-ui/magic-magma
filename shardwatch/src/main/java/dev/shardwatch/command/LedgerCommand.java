@@ -53,6 +53,11 @@ public final class LedgerCommand extends BaseCommand {
         if (target == null) {
             return true;
         }
+        boolean chat = args[args.length - 1].equalsIgnoreCase("--chat");
+        if (sender instanceof org.bukkit.entity.Player p && !chat && plugin.getConfig().getBoolean("gui.enabled", true)) {
+            plugin.menus().openLedger(p, target, 0);
+            return true;
+        }
         int page = Math.max(1, intArg(args, 1, 1));
         int per = plugin.getConfig().getInt("ledger.chat-page-size", 8);
         String name = Players.name(target);

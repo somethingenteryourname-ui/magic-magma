@@ -245,6 +245,26 @@ tools:
   glint_monocle:
     cooldown-ticks: 20
 
+# ─────────────────────────────────────────────────────────── Menus
+gui:
+  # Menus for /sw, /flares, /flare <player>, /ledger, /glint and the Verdict Gavel. Off = chat views.
+  enabled: true
+  # Crystal panel drawn behind chest menus with the "shardwatch:gui" font. Needs the resource pack.
+  custom-backgrounds: true
+  # The "shardwatch:crystal" tooltip frame on every icon and tool.
+  tooltip-style: true
+  # Fill empty slots with the crystal background tile.
+  filler: true
+  prompt-seconds: 60
+  durations:
+    hush: [10m, 30m, 1h, 6h, 1d, 7d, perm]
+    encase: [1h, 1d, 3d, 7d, 14d, 30d, perm]
+  flare-outcomes: ["Handled", "Verdict issued", "Rolled back"]
+  rewind:
+    sources: ["*", "#tnt", "#creeper", "#fire", "#enderman"]
+    times: [10m, 30m, 1h, 6h, 1d, 3d, 7d]
+    radii: [5, 10, 15, 25, 40, 60]
+
 chat-log:
   # Commands that are never written to the chat log (passwords etc.).
   ignored-commands: [login, l, register, reg, changepassword, cp]
@@ -338,6 +358,12 @@ fx:
       particles: []
     ui-back:
       sounds: ["minecraft:block.amethyst_block.step 0.8 1.2"]
+      particles: []
+    ui-open:
+      sounds: ["minecraft:block.amethyst_block.resonate 0.5 1.6"]
+      particles: []
+    ui-click:
+      sounds: ["minecraft:block.amethyst_block.hit 0.6 1.8"]
       particles: []
     ui-page:
       sounds: ["minecraft:item.book.page_turn 0.8 1.4"]

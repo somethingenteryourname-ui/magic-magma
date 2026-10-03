@@ -213,6 +213,73 @@ def sheet(assets, title, cols=6, cell=200):
     return img
 
 
+def nine_slice(sprite, w, h, border=9):
+    """Stretches a nine-slice sprite to w x h (like the game does for tooltip styles)."""
+    out = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+    sw, sh = sprite.size
+    b = border
+    xs = [(0, b, 0, b), (b, sw - b, b, w - b), (sw - b, sw, w - b, w)]
+    ys = [(0, b, 0, b), (b, sh - b, b, h - b), (sh - b, sh, h - b, h)]
+    for sx0, sx1, dx0, dx1 in xs:
+        for sy0, sy1, dy0, dy1 in ys:
+            if dx1 > dx0 and dy1 > dy0:
+                out.alpha_composite(sprite.crop((sx0, sy0, sx1, sy1)).resize((dx1 - dx0, dy1 - dy0), Image.NEAREST), (dx0, dy0))
+    return out
+
+
+def menu_mockup():
+    """Crystal Console as it should look in game: vanilla chest + background glyph + icon models + a tooltip."""
+    scale = 3
+    glyph = Image.open(NS / 'textures' / 'font' / 'menu_6.png').convert('RGBA')
+    w, h = glyph.size
+    base = Image.new('RGBA', (w, h), (198, 198, 198, 255))
+    d = ImageDraw.Draw(base)
+    def slot_rect(x, y):
+        d.rectangle([x, y, x + 17, y + 17], fill=(139, 139, 139, 255))
+        d.line([x, y, x + 16, y], fill=(55, 55, 55, 255)); d.line([x, y, x, y + 16], fill=(55, 55, 55, 255))
+        d.line([x + 1, y + 17, x + 17, y + 17], fill=(255, 255, 255, 255)); d.line([x + 17, y + 1, x + 17, y + 17], fill=(255, 255, 255, 255))
+    for r in range(6):
+        for c in range(9):
+            slot_rect(7 + c * 18, 17 + r * 18)
+    for r in range(3):
+        for c in range(9):
+            slot_rect(7 + c * 18, 139 + r * 18)
+    for c in range(9):
+        slot_rect(7 + c * 18, 197)
+    base.alpha_composite(glyph)
+    img = base.resize((w * scale, h * scale), Image.NEAREST)
+    layout = {4: 'icon_info', 19: 'icon_flare', 20: 'verdict_gavel', 21: 'icon_ledger', 22: 'icon_glint', 23: 'icon_rewind',
+              24: 'icon_scope', 25: 'icon_facet', 30: 'echo_lens', 31: 'veil_lantern', 32: 'icon_flare_chat',
+              38: 'icon_lustre', 40: 'icon_settings', 42: 'icon_keepsake', 49: 'icon_close'}
+    for slot in range(54):
+        name = layout.get(slot, 'icon_pane')
+        if not (NS / 'models' / 'item' / f'{name}.json').exists():
+            name = 'icon_pane'
+        model = json.loads((NS / 'models' / 'item' / f'{name}.json').read_text())
+        icon = render_model(name, model['display'].get('gui', {}), 16 * scale)
+        x, y = 8 + (slot % 9) * 18, 18 + (slot // 9) * 18
+        img.alpha_composite(icon, (x * scale, y * scale))
+    dd = ImageDraw.Draw(img)
+    dd.text((8 * scale, 5 * scale), '✦ Crystal Console', fill=(0x55, 0x30, 0x5F), font=font(8 * scale))
+    dd.text((8 * scale, (h - 94) * scale), 'Inventory', fill=(0x40, 0x40, 0x40), font=font(8 * scale))
+    # Tooltip of the Flare Board button.
+    bg = Image.open(NS / 'textures' / 'gui' / 'sprites' / 'tooltip' / 'crystal_background.png').convert('RGBA')
+    fr = Image.open(NS / 'textures' / 'gui' / 'sprites' / 'tooltip' / 'crystal_frame.png').convert('RGBA')
+    tw, th = 120, 46
+    tip = nine_slice(bg, tw + 24, th + 24)
+    tip.alpha_composite(nine_slice(fr, tw + 24, th + 24))
+    tip = tip.resize(((tw + 24) * scale, (th + 24) * scale), Image.NEAREST)
+    td = ImageDraw.Draw(tip)
+    lines = [('Flare Board', (0xF5, 0x9A, 0xC8)), ('3 open Flare(s)', (0x8A, 0x9B, 0xA8)), ('', None), ('Click to open', (0x3F, 0xD0, 0xC9))]
+    for i, (text, col) in enumerate(lines):
+        if text:
+            td.text((12 * scale, (11 + i * 10) * scale), text, fill=col, font=font(7 * scale))
+    canvas = Image.new('RGBA', (img.width + tip.width - 120, img.height + 20), BG)
+    canvas.alpha_composite(img, (0, 10))
+    canvas.alpha_composite(tip, (img.width - 140, 10 + 40 * scale))
+    return canvas
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for old in OUT.glob('*.png'):
@@ -231,6 +298,9 @@ def main():
             if (NS / 'models' / 'item' / f'{a.id}.json').exists() and key in ('tools', 'badges'):
                 asset_card(a).save(OUT / f'{a.id}.png')
                 made.append(f'{a.id}.png')
+    if (NS / 'textures' / 'font' / 'menu_6.png').exists():
+        menu_mockup().save(OUT / 'menu-console.png')
+        made.append('menu-console.png')
     print('previews:', ', '.join(made))
 
 

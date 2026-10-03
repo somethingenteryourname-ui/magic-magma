@@ -45,6 +45,10 @@ public final class FlareCommands extends BaseCommand {
         if (target == null) {
             return true;
         }
+        if (args.length == 1 && plugin.getConfig().getBoolean("gui.enabled", true)) {
+            plugin.menus().openFlareCreate(p, target);
+            return true;
+        }
         String category = "other";
         int from = 1;
         if (args.length > 1 && plugin.flares().categories().containsKey(args[1].toLowerCase(Locale.ROOT))) {
@@ -95,6 +99,10 @@ public final class FlareCommands extends BaseCommand {
             }));
             case "all" -> list(sender, null, Math.max(1, intArg(args, 1, 1)));
             default -> {
+                if (sender instanceof Player p && !sub.equals("list") && plugin.getConfig().getBoolean("gui.enabled", true)) {
+                    plugin.menus().openFlareBoard(p, false, 0);
+                    return true;
+                }
                 list(sender, List.of(Flare.Status.OPEN, Flare.Status.CLAIMED), Math.max(1, intArg(args, 1, 1)));
             }
         }

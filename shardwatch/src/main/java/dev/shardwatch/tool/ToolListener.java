@@ -144,7 +144,7 @@ public final class ToolListener implements Listener {
                     if (t == null) {
                         plugin.lang().send(p, "tools.gavel-no-target");
                     } else {
-                        p.performCommand("ledger " + t.getName());
+                        plugin.menus().openLedger(p, t, 0);
                     }
                 }
             }
@@ -212,7 +212,11 @@ public final class ToolListener implements Listener {
         tools().startCooldown(p, StaffTool.VERDICT_GAVEL, tools().cooldown(StaffTool.VERDICT_GAVEL));
         lastGavelTarget.put(p.getUniqueId(), target.getUniqueId());
         plugin.fx().play("gavel-hit", target.getLocation().add(0, 1.2, 0));
-        openVerdicts(p, target);
+        if (plugin.getConfig().getBoolean("gui.enabled", true)) {
+            plugin.menus().openVerdict(p, target);
+        } else {
+            openVerdicts(p, target);
+        }
     }
 
     /** Chat-based verdict picker (replaced by the Verdict menu in Stage 3). */
@@ -422,7 +426,8 @@ public final class ToolListener implements Listener {
         if (!plugin.getConfig().getBoolean("tools.prevent-storing", true)) {
             return;
         }
-        if (event.getView().getTopInventory().getType() == InventoryType.CRAFTING) {
+        if (event.getView().getTopInventory().getType() == InventoryType.CRAFTING
+                || event.getView().getTopInventory().getHolder() instanceof dev.shardwatch.gui.MenuHolder) {
             return;
         }
         ItemStack moving = event.isShiftClick() ? event.getCurrentItem() : event.getCursor();

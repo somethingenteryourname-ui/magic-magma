@@ -224,8 +224,8 @@ hum:
   mode-off: "<prefix><muted>Hum mode off."
 
 veil:
-  on: "<prefix><pink>✧ You are Veiled.</pink> <muted>Players can't see you."
-  off: "<prefix><teal>✧ Veil lifted.</teal> <muted>You're visible again."
+  enabled: "<prefix><pink>✧ You are Veiled.</pink> <muted>Players can't see you."
+  disabled: "<prefix><teal>✧ Veil lifted.</teal> <muted>You're visible again."
   staff-on: "<prefix><muted><player> slipped behind the Veil."
   staff-off: "<prefix><muted><player> stepped out of the Veil."
   still: "<prefix><pink>✧ You are still Veiled."
@@ -388,6 +388,149 @@ tools:
     name: "<facet> <muted>Sigil"
     lore:
       - "<muted>Proof of the facet you hold."
+
+# ─────────────────────────────────────────── Menus
+# Titles sit on the pale crystal panel, so they use dark plum. Lore uses the palette.
+gui:
+  state-on: "<ok>on"
+  state-off: "<bad>off"
+  online: "<ok>● online"
+  offline: "<muted>○ offline"
+  chosen: "<ok>✔ selected"
+  blank: ""
+  prompt-timeout: "<prefix><muted>No answer — cancelled."
+  prompt-cancelled: "<prefix><muted>Cancelled."
+  prompt-reason: "<prefix><pink>Type the reason in chat</pink> <muted>(or 'cancel'). You have <seconds>s."
+  prompt-outcome: "<prefix><pink>Type what you did about this Flare</pink> <muted>(or 'cancel')."
+  prompt-dismiss: "<prefix><pink>Type why this Flare is dismissed</pink> <muted>(or 'cancel')."
+  prompt-revoke: "<prefix><pink>Type why you're revoking it</pink> <muted>(or 'cancel')."
+  prompt-details: "<prefix><pink>Describe what happened</pink> <muted>(or 'cancel')."
+  common:
+    empty: {name: "<muted>Nothing here", lore: ["<muted>All quiet in the crystal."]}
+    prev: {name: "<teal>◀ Previous", lore: ["<muted>Page <page>/<pages>"]}
+    next: {name: "<teal>Next ▶", lore: ["<muted>Page <page>/<pages>"]}
+    back: {name: "<pink>Back", lore: []}
+    close: {name: "<muted>Close", lore: []}
+  console:
+    title: "<#55305F><b>✦ Crystal Console"
+    me:
+      name: "<white><player>"
+      lore: ["<muted>Facet:</muted> <facet>", "<muted>Lustre:</muted> <pink><lustre></pink> <muted>(lifetime <lifetime>)"]
+    flares: {name: "<pink><b>Flare Board", lore: ["<muted><count> open Flare(s)", "", "<teal>Click to open"]}
+    judge: {name: "<rose><b>Pass a Verdict", lore: ["<muted>Pick an online player.", "", "<teal>Click to choose"]}
+    ledger: {name: "<pink><b>Ledger", lore: ["<muted>Look up a player's history.", "", "<teal>Click to choose"]}
+    glint: {name: "<teal><b>Glint Watch", lore: ["<muted>Recent x-ray alerts.", "", "<teal>Click to open"]}
+    rewind: {name: "<teal><b>Timeglass Rewind", lore: ["<muted>Roll back griefing around you.", "", "<teal>Click to set up"]}
+    scope: {name: "<ice><b>Shardscope", lore: ["<muted>The log viewer, as a book.", "", "<teal>Click to open"]}
+    roster: {name: "<gold><b>Facet Roster", lore: ["<muted>Every staff member and rank.", "", "<teal>Click to open"]}
+    kit: {name: "<ice><b>Staff Kit", lore: ["<muted>Get every tool your Facet allows."]}
+    veil: {name: "<pink><b>Veil</b> <state>", lore: ["<muted>Click to toggle vanish."]}
+    hum: {name: "<ice><b>Hum mode", lore: ["<muted>Route your chat to staff only.", "<muted>Click to toggle."]}
+    settings: {name: "<muted><b>Settings", lore: ["<muted>Alerts, effects, inspect mode."]}
+  flares:
+    title: "<#55305F><b>✦ Flare Board</b> <#8F6596>open"
+    title-all: "<#55305F><b>✦ Flare Board</b> <#8F6596>all"
+    entry:
+      name: "<pink>#<id></pink> <white><player></white> <muted>· <category>"
+    entry-open: ["<muted>From</muted> <white><reporter></white> <muted><ago>", "<white><reason>", "", "<ok>● open", "<teal>Click for actions"]
+    entry-claimed: ["<muted>From</muted> <white><reporter></white> <muted><ago>", "<white><reason>", "", "<ice>◐ claimed by <handler>", "<teal>Click for actions"]
+    entry-resolved: ["<muted>From</muted> <white><reporter></white> <muted><ago>", "<white><reason>", "", "<ok>✔ resolved by <handler>", "<muted><resolution>"]
+    entry-dismissed: ["<muted>From</muted> <white><reporter></white> <muted><ago>", "<white><reason>", "", "<bad>✕ dismissed by <handler>", "<muted><resolution>"]
+    filter-open: {name: "<teal>Showing: open", lore: ["<muted>Click to show every Flare."]}
+    filter-all: {name: "<teal>Showing: all", lore: ["<muted>Click to show open Flares only."]}
+  flare-action:
+    title: "<#55305F><b>Flare #<id>"
+    target:
+      name: "<white><player>"
+      lore: ["<muted>Reported by <reporter> <ago>", "<muted>Category:</muted> <category>", "<white><reason>", "<muted><world> <x> <y> <z>"]
+    claim: {name: "<ok><b>Claim", lore: ["<muted>Tell other staff you've got it."]}
+    teleport: {name: "<teal><b>Teleport", lore: ["<muted>To the player (or where it was filed)."]}
+    resolve: {name: "<ok>Resolve: <white><outcome>", lore: ["<muted>Close it with this outcome."]}
+    resolve-custom: {name: "<ok>Resolve…", lore: ["<muted>Type your own outcome."]}
+    dismiss: {name: "<bad><b>Dismiss", lore: ["<muted>Nothing to act on. You'll type why."]}
+    judge: {name: "<rose><b>Pass a Verdict", lore: ["<muted>On <player>."]}
+    ledger: {name: "<pink>Ledger", lore: ["<muted><player>'s history."]}
+  flare-create:
+    title: "<#55305F><b>✦ Flare</b> <#8F6596><player>"
+    target:
+      name: "<white><player>"
+      lore: ["<muted>Pick what happened below.", "<muted>Details:</muted> <white><details>"]
+    category-lore: ["", "<teal>Click to send this Flare"]
+    details: {name: "<pink>Add details", lore: ["<muted>Type a short description first.", "<muted>Now:</muted> <white><details>"]}
+  pick:
+    title-judge: "<#55305F><b>Choose a player"
+    title-ledger: "<#55305F><b>Whose Ledger?"
+    title-watch: "<#55305F><b>Who to watch?"
+    entry:
+      name: "<white><player>"
+    entry-judge: ["<muted><world> · <ping> ms", "", "<teal>Click to pass a verdict"]
+    entry-ledger: ["<muted><world> · <ping> ms", "", "<teal>Click to open their Ledger"]
+    entry-watch: ["<muted><world> · <ping> ms", "", "<teal>Click to spectate"]
+  verdict:
+    title: "<#55305F><b>⚖ Verdict</b> <#8F6596><player>"
+    target:
+      name: "<white><player>"
+      lore-online: ["<ok>● online"]
+      lore-offline: ["<muted>○ offline — Eject and Petrify unavailable"]
+    chip: {name: "<#F7C6DF><b>Chip", lore: ["<muted>A warning, kept in the Ledger."]}
+    hush: {name: "<#7FE8E0><b>Hush", lore: ["<muted>Mute for a while."]}
+    eject: {name: "<#F59AC8><b>Eject", lore: ["<muted>Kick from the server."]}
+    encase: {name: "<#D9468F><b>Encase", lore: ["<muted>Ban, for a time or for good."]}
+    petrify: {name: "<#B7F2FF><b>Petrify", lore: ["<muted>Freeze in place right now."]}
+    release: {name: "<#B7F2FF><b>Release", lore: ["<muted>Lift Petrify."]}
+    offline: {name: "<muted><type_name>", lore: ["<muted>Needs the player online."]}
+    ledger: {name: "<pink>Ledger", lore: ["<muted><player>'s history."]}
+  duration:
+    title: "<#55305F><b><type_name></b> <#8F6596>for how long?"
+    preset: {name: "<white><duration>", lore: ["<teal>Click to choose"]}
+    permanent: {name: "<rose><b>Permanent", lore: ["<muted>Until someone lifts it."]}
+  reason:
+    title: "<#55305F><b><type_name></b> <#8F6596>why?"
+    preset: {name: "<white><reason>", lore: ["<muted>Preset #<id>", "<teal>Click to choose"]}
+    custom: {name: "<pink><b>Type a reason…", lore: ["<muted>Write it in chat."]}
+  confirm:
+    title: "<#55305F><b>Confirm verdict"
+    summary:
+      name: "<white><player>"
+      lore: ["<muted>Verdict:</muted> <type_name>", "<muted>Length:</muted> <white><duration>", "<muted>Reason:</muted> <white><reason>", "<muted>Silent:</muted> <silent>"]
+    accept: {name: "<ok><b>Pass verdict", lore: ["<muted><type_name> on <player>."]}
+    decline: {name: "<bad><b>Cancel", lore: []}
+    silent: {name: "<ice>Silent: <silent>", lore: ["<muted>Only staff see the announcement."]}
+  ledger:
+    title: "<#55305F><b>Ledger</b> <#8F6596><player>"
+    entry-name: "<type_color><type_name></type_color> <muted>#<id></muted> <status_tag>"
+    entry: ["<muted><ago> by</muted> <white><actor>", "<muted>Length:</muted> <duration>", "<white><reason>"]
+    entry-active: ["<muted><ago> by</muted> <white><actor>", "<muted>Length:</muted> <duration> <muted>(<remaining> left)", "<white><reason>", "", "<bad>Click to revoke"]
+    summary:
+      name: "<white><player>"
+      lore: ["<muted><total> entries · <ok><active> active"]
+  glint:
+    title: "<#55305F><b>◈ Glint Watch"
+    entry-name: "<white><player></white> <muted>· score</muted> <pink><score>"
+    entry: ["<muted><ore> · <ago>", "<muted><world> <x> <y> <z>", "<muted>Handled: <handled>", "", "<teal>Left: teleport · Right: watch", "<teal>Shift: mark handled"]
+    suspects: {name: "<teal><b>Watch someone", lore: ["<muted>Pick an online player to spectate."]}
+  roster:
+    title: "<#55305F><b>Facet Roster"
+    entry-name: "<white><player>"
+    entry: ["<facet>", "<muted>Lustre <pink><lustre></pink> (lifetime <lifetime>)", "<online>"]
+    entry-manage: ["<facet>", "<muted>Lustre <pink><lustre></pink> (lifetime <lifetime>)", "<online>", "", "<teal>Click to change Facet"]
+  facet-pick:
+    title: "<#55305F><b>Facet for</b> <#8F6596><player>"
+    entry: ["<muted>Weight <weight> · <perms> permissions", "", "<teal>Click to give <player> this Facet"]
+    none: {name: "<bad><b>Remove Facet", lore: ["<muted><player> stops being staff."]}
+  settings:
+    title: "<#55305F><b>Settings"
+    alerts: {name: "<pink><b>Alerts</b> <state>", lore: ["<muted>Flare and Glint alerts in chat."]}
+    fx: {name: "<pink><b>Effects</b> <state>", lore: ["<muted>Your personal particles and sounds."]}
+    inspect: {name: "<teal><b>Inspect mode</b> <state>", lore: ["<muted>Click blocks to read their Echoes."]}
+  rewind:
+    title: "<#55305F><b>⌛ Timeglass Rewind"
+    source: {name: "<white><source>", lore: ["<muted>Whose changes to rewind.", "<chosen>"]}
+    time: {name: "<white><time>", lore: ["<muted>How far back.", "<chosen>"]}
+    radius: {name: "<white>radius <radius>", lore: ["<muted>Blocks around you.", "<chosen>"]}
+    preview: {name: "<teal><b>Preview", lore: ["<muted><source> · <time> · r<radius>", "<muted>Shows shimmering blocks first."]}
+    run: {name: "<ok><b>Rewind", lore: ["<muted><source> · <time> · r<radius>"]}
+    undo: {name: "<bad>Undo last rewind", lore: []}
 
 admin:
   reloaded: "<prefix><ok>Reloaded in <ms> ms."

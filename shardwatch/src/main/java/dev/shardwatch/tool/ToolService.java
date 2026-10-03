@@ -90,8 +90,9 @@ public final class ToolService {
         return create(tool, tier, null);
     }
 
-    /** Hook for later stages (tooltip style); a no-op until the pack has the sprites. */
+    /** Crystal tooltip frame (Stage 3 sprites). */
     void applyStyle(ItemStack item) {
+        plugin.icons().style(item);
     }
 
     private String sigilFacetName(String facetId) {
