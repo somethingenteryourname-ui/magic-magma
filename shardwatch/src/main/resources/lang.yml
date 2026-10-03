@@ -24,6 +24,7 @@ help:
   - "  <teal>/echo</teal> <muted>inspect mode · </muted><teal>/rewind <who> <time> [radius]</teal>"
   - "  <teal>/glint</teal> <muted>x-ray alerts · </muted><teal>/facet</teal> <muted>staff ranks"
   - "  <teal>/hum</teal> <muted>staff chat · </muted><teal>/veil</teal> <muted>vanish · </muted><teal>/scope</teal> <muted>logs"
+  - "  <pink>/sw kit</pink> <muted>your staff tools · </muted><pink>/sw give</pink> <muted>· </muted><pink>/sw reload"
   - "<gradient:#7FE8E0:#F59AC8>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gradient>"
 
 usage:
@@ -36,9 +37,10 @@ usage:
   petrify: "<prefix><muted>Usage: <pink>/<label> <player>"
   ledger: "<prefix><muted>Usage: <pink>/<label> <player> [page]</pink> or <pink>/<label> revoke <id> [reason]"
   flare: "<prefix><muted>Usage: <pink>/<label> <player> [category] [reason]"
-  rewind: "<prefix><muted>Usage: <teal>/<label> <player|#tnt|#fire|*> <time> [radius|global] [-p]</teal> or <teal>/<label> undo"
+  rewind: "<prefix><muted>Usage: <teal>/<label> <player|#tnt|#fire|*> <time> [radius|global] [-p]</teal>, <teal>/<label> area <time> [player]</teal> or <teal>/<label> undo"
   glint: "<prefix><muted>Usage: <teal>/<label> [list|suspects|check|tp|watch|unwatch|handle] [player|id]"
   facet: "<prefix><muted>Usage: <teal>/<label> set <player> <facet|none>"
+  give: "<prefix><muted>Usage: <pink>/<label> give <player> <tool> [tier|facet] [amount]"
 
 # ─────────────────────────────────────────── Verdicts
 verdict:
@@ -299,6 +301,93 @@ scope:
   chat-top: "<gradient:#F59AC8:#7FE8E0>━━━━━━━━━━━ ✦ Shardscope · <tab> ✦ ━━━━━━━━━━━</gradient> <muted>filter: <filter>"
   chat-page: "<muted>  window <window>  "
   chat-bottom: "<gradient:#7FE8E0:#F59AC8>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gradient>"
+
+# ─────────────────────────────────────────── Tools
+tools:
+  footer:
+    - ""
+    - "<dark_gray>✦ Shardwatch staff tool"
+  tier-line:
+    - "<muted>Refinement <pink><tier></pink>"
+  no-permission: "<prefix><bad>This tool hums, but not for you."
+  cannot-drop: "<prefix><muted>Staff tools stay with you."
+  unknown: "<prefix><bad>No tool called <tool>."
+  given: "<prefix><ok>Gave <player> <tool> (tier <tier>)."
+  kit-given: "<prefix><ok>✦ <count> tool(s) added to your kit."
+  kit-none: "<prefix><muted>You already carry every tool your Facet allows."
+  gavel-header: "<prefix><pink><b>Verdict</b></pink> <muted>for</muted> <white><player></white>"
+  gavel-button-chip: "<#F7C6DF>[Chip]"
+  gavel-button-hush: "<#7FE8E0>[Hush]"
+  gavel-button-eject: "<#F59AC8>[Eject]"
+  gavel-button-encase: "<#D9468F>[Encase]"
+  gavel-button-petrify: "<#B7F2FF>[Petrify]"
+  gavel-button-ledger: "<muted>[Ledger]"
+  gavel-no-target: "<prefix><muted>Strike someone with the gavel first."
+  timeglass-pos1: "<prefix><teal>⌛ First corner</teal> <muted><x> <y> <z>"
+  timeglass-pos2: "<prefix><teal>⌛ Second corner</teal> <muted><x> <y> <z>"
+  timeglass-size: "<prefix><muted>Selection <white><dx>×<dy>×<dz></white> (max <max> per side). Sneak + right-click to rewind it."
+  timeglass-no-selection: "<prefix><muted>Mark two corners with the Timeglass first (left- and right-click blocks)."
+  timeglass-offer: "<prefix><teal>⌛ Rewind everything in the selection from the last…"
+  timeglass-preset: "<hover:show_text:'<teal>Rewind <time>'><pink>[<time>]</pink></hover>"
+  compass-none: "<prefix><muted>No open Flares. The needle wanders."
+  compass-cycle: "<prefix><pink>✦ Compass → Flare #<id></pink> <muted>(<index>/<total>) <player>: <reason>"
+  echo_lens:
+    name: "<gradient:#B7F2FF:#7FE8E0><b>Echo Lens</b></gradient>"
+    lore:
+      - "<muted>Hears what every block remembers."
+      - ""
+      - "<pink>Left-click</pink> <muted>a block: its history"
+      - "<pink>Right-click</pink> <muted>a face: the block placed there"
+  timeglass:
+    name: "<gradient:#F59AC8:#7FE8E0><b>Timeglass</b></gradient>"
+    lore:
+      - "<muted>Pours griefing back where it came from."
+      - ""
+      - "<pink>Left/right-click</pink> <muted>blocks: mark corners"
+      - "<pink>Sneak + right-click</pink><muted>: rewind the selection"
+  verdict_gavel:
+    name: "<gradient:#D9468F:#F59AC8><b>Verdict Gavel</b></gradient>"
+    lore:
+      - "<muted>One strike, one judgement."
+      - ""
+      - "<pink>Hit</pink> <muted>or</muted> <pink>right-click</pink> <muted>a player: choose a verdict"
+      - "<pink>Sneak + right-click</pink><muted>: last target's Ledger"
+  petrify_prism:
+    name: "<gradient:#B7F2FF:#F59AC8><b>Petrify Prism</b></gradient>"
+    lore:
+      - "<muted>Holds a player still as crystal."
+      - ""
+      - "<pink>Right-click</pink> <muted>a player: petrify / release"
+  veil_lantern:
+    name: "<gradient:#7FE8E0:#F59AC8><b>Veil Lantern</b></gradient>"
+    lore:
+      - "<muted>Its light hides the one who carries it."
+      - ""
+      - "<pink>Right-click</pink><muted>: toggle Veil"
+  flare_compass:
+    name: "<gradient:#F59AC8:#FFC7E6><b>Flare Compass</b></gradient>"
+    lore:
+      - "<muted>Always points at the oldest open Flare."
+      - ""
+      - "<pink>Right-click</pink><muted>: warp there and claim it"
+      - "<pink>Sneak + right-click</pink><muted>: next Flare"
+  glint_monocle:
+    name: "<gradient:#7FE8E0:#B7F2FF><b>Glint Monocle</b></gradient>"
+    lore:
+      - "<muted>Catches the glint in a miner's eye."
+      - ""
+      - "<pink>Right-click</pink><muted>: watch the next suspect"
+      - "<pink>Sneak + right-click</pink><muted>: stop watching"
+  lustre_shard:
+    name: "<gradient:#F59AC8:#7FE8E0><b>Lustre Shard</b></gradient>"
+    lore:
+      - "<muted>Crystallised gratitude."
+      - ""
+      - "<pink>Right-click</pink><muted>: absorb it as Lustre"
+  sigil:
+    name: "<facet> <muted>Sigil"
+    lore:
+      - "<muted>Proof of the facet you hold."
 
 admin:
   reloaded: "<prefix><ok>Reloaded in <ms> ms."

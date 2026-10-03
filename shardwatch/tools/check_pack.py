@@ -79,21 +79,27 @@ def highlight_count(img):
     return sum(tuple(c) in TOP for c in cols)
 
 
-def light_direction_ok(img):
-    a = img[..., 3] > 0
-    lum = img[..., :3].astype(float) @ np.array([0.2126, 0.7152, 0.0722])
-    h, w = a.shape
-    yy, xx = np.mgrid[0:h, 0:w]
-    # Compare the lit and shadowed side of each shape: pixels whose up-left neighbour is empty vs down-right empty.
-    ul = a & ~np.roll(np.roll(a, 1, 0), 1, 1)
-    dr = a & ~np.roll(np.roll(a, -1, 0), -1, 1)
-    if ul.sum() < 4 or dr.sum() < 4:
+def light_direction_ok(img, normal_img):
+    """
+    The albedo must be shaded by ONE light from the top-left: brightness has to correlate with how much each pixel's
+    normal (from the _n map) faces that light, and more strongly than with the opposite (bottom-right) light.
+    """
+    occ = (img[..., 3] > 0) & (normal_img[..., 3] > 0)
+    if occ.sum() < 20:
         return True
-    inner_ul = a & np.roll(np.roll(ul, 1, 0), 1, 1)
-    inner_dr = a & np.roll(np.roll(dr, -1, 0), -1, 1)
-    if inner_ul.sum() < 4 or inner_dr.sum() < 4:
-        return lum[ul].mean() >= lum[dr].mean()
-    return lum[inner_ul].mean() > lum[inner_dr].mean()
+    lum = (img[..., :3].astype(float) @ np.array([0.2126, 0.7152, 0.0722]))[occ]
+    nx = normal_img[..., 0][occ] / 255 * 2 - 1
+    ny = normal_img[..., 1][occ] / 255 * 2 - 1
+    nz = np.sqrt(np.clip(1 - nx * nx - ny * ny, 0, 1))
+    L = np.array([-0.55, -0.65, 0.52])
+    L /= np.linalg.norm(L)
+    lit = nx * L[0] + ny * L[1] + nz * L[2]
+    opp = -nx * L[0] - ny * L[1] + nz * L[2]
+    if lit.std() < 1e-6:
+        return True
+    c_lit = np.corrcoef(lum, lit)[0, 1]
+    c_opp = np.corrcoef(lum, opp)[0, 1] if opp.std() > 1e-6 else -1
+    return c_lit > 0.1 and c_lit > c_opp
 
 
 def check_labpbr(base: Path, frames: int):
@@ -225,7 +231,8 @@ def check_asset(a):
             shade_errs.append(f'{n}: outline {outline_share(img):.0%}')
         if highlight_count(img) < 3:
             shade_errs.append(f'{n}: no faceted highlights')
-        if not light_direction_ok(img):
+        np_ = tp.with_name(n + '_n.png')
+        if np_.exists() and not light_direction_ok(img, load(np_)):
             shade_errs.append(f'{n}: light not from top-left')
         pbr_errs += check_labpbr(tp, 1)
         gp = tex_path(n + '_glow')

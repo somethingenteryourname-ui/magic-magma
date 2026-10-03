@@ -70,12 +70,17 @@ class Spec:
     display: dict
     tiers: int = 1
     states: list[str] = field(default_factory=list)
-    # Custom glow animation: fn(canvas_rgba, glow_mask, frame_t, tier, state) -> RGBA frame. None = shimmer sweep.
+    # Custom glow animation: fn(frame_canvas, t, tier, state) draws only the glowing parts of frame t (0..1).
+    # Use it for moving parts (falling sand, spinning needle, flicker). None = shimmer sweep over glowing pixels.
     glow: Optional[Callable] = None
     frames: int = GLOW_FRAMES
     frametime: int = FRAMETIME
     # Item definition extras: 'cooldown' -> range_dispatch on cooldown to the first state, 'flag' -> condition on flag 0.
     state_rule: Optional[str] = None
+    # Wraps the generated item model: fn(model_json) -> model_json (e.g. a composite with a pointing needle).
+    wrap_item: Optional[Callable] = None
+    # Internal parts (needles…) get a model but no items/ definition of their own.
+    part: bool = False
 
 
 REGISTRY: dict[str, Spec] = {}
@@ -291,20 +296,32 @@ def build_variant(spec: Spec, name: str, tier: int, state: Optional[str]):
     save_png(albedo, tdir / f'{name}.png')
     save_png(normal, tdir / f'{name}_n.png')
     save_png(specular, tdir / f'{name}_s.png')
-    has_glow = bool((glow > 0).any())
+    has_glow = bool((glow > 0).any()) or spec.glow is not None
     tex_paths = {'0': tdir / f'{name}.png'}
     glow_union = glow > 0
     if has_glow:
         if spec.glow:
-            frames = [spec.glow(c, albedo, glow, k / spec.frames, tier, state) for k in range(spec.frames)]
+            frames, f_n, f_s = [], [], []
+            for k in range(spec.frames):
+                fc = Canvas()
+                spec.glow(fc, k / spec.frames, tier, state)
+                a, n, s, _, _ = fc.render(outline=False)
+                frames.append(a)
+                f_n.append(n)
+                s[..., 3] = np.where(a[..., 3] > 0, 230, 0)
+                f_s.append(s)
+            g_n, g_s = np.concatenate(f_n, 0), np.concatenate(f_s, 0)
         else:
             frames = shimmer_frames(c, albedo, glow, spec.frames)
+            g_n, g_s = None, None
         glow_union = np.zeros_like(glow_union)
         for f in frames:
             glow_union |= f[..., 3] > 0
+        glow_union &= depth > 0
         strip = np.concatenate(frames, 0)
         save_png(strip, tdir / f'{name}_glow.png')
-        g_n, g_s = labpbr_for_glow(frames, specular, normal, np.maximum(glow, 0.5 * glow_union))
+        if g_n is None:
+            g_n, g_s = labpbr_for_glow(frames, specular, normal, np.maximum(glow, 0.5 * glow_union))
         save_png(g_n, tdir / f'{name}_glow_n.png')
         save_png(g_s, tdir / f'{name}_glow_s.png')
         for suffix in ('', '_n', '_s'):
@@ -316,6 +333,13 @@ def build_variant(spec: Spec, name: str, tier: int, state: Optional[str]):
 
 
 def item_definition(spec: Spec) -> dict:
+    d = _item_definition(spec)
+    if spec.wrap_item:
+        d['model'] = spec.wrap_item(d['model'])
+    return d
+
+
+def _item_definition(spec: Spec) -> dict:
     base = {'type': 'minecraft:model', 'model': f'shardwatch:item/{spec.id}'}
     tiered = base
     if spec.tiers > 1:
@@ -347,7 +371,8 @@ def build(spec: Spec):
         model, tex_paths, albedo = build_variant(spec, name, tier, state)
         write_bbmodel(name, model, tex_paths, spec.frametime)
         albedos[name] = albedo
-    save_json(item_definition(spec), NS / 'items' / f'{spec.id}.json')
+    if not spec.part:
+        save_json(item_definition(spec), NS / 'items' / f'{spec.id}.json')
     return albedos
 
 

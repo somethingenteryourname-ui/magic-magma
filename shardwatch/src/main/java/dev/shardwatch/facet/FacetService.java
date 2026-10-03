@@ -166,6 +166,10 @@ public final class FacetService implements Listener {
                 apply(online);
                 plugin.lang().send(online, "facet.changed-target", r);
                 if (facet != null && (before == null || facet.weight() > before.weight())) {
+                    if (plugin.getConfig().getBoolean("facets.give-sigil", true)) {
+                        online.getInventory().addItem(plugin.tools().create(dev.shardwatch.tool.StaffTool.SIGIL, 1, facet.id()))
+                                .values().forEach(i -> online.getWorld().dropItem(online.getLocation(), i));
+                    }
                     plugin.animations().halo(online, facet.color());
                     plugin.fx().play("facet-promote", online.getLocation().add(0, 1, 0));
                 }

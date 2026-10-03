@@ -270,7 +270,7 @@ class Canvas:
             glow[m] = L.glow
         return top, normals, np.clip(height, 0, 1), depth, glow
 
-    def render(self):
+    def render(self, outline=True):
         """Returns (albedo RGBA, normal RGBA, specular RGBA, depth map, glow map) as numpy arrays."""
         top, normals, height, depth, glow = self.compose()
         h, w = self.h, self.w
@@ -321,7 +321,7 @@ class Canvas:
         occupied = top >= 0
         for y in range(h):
             for x in range(w):
-                if not occupied[y, x]:
+                if not outline or not occupied[y, x]:
                     continue
                 edges = []
                 for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):

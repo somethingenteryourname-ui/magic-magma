@@ -12,7 +12,7 @@ commands:
   shardwatch:
     description: Shardwatch hub — help, menu, kit, give, reload.
     aliases: [sw]
-    usage: /<command> [help|reload|version]
+    usage: /<command> [help|kit|give|reload|version]
   flare:
     description: Send a Flare (report) about a player.
     aliases: [report]
@@ -59,7 +59,7 @@ commands:
   rewind:
     description: Rewind (roll back) logged block changes.
     aliases: [rollback]
-    usage: /<command> <player|#source|*> <time> [radius|global] [-p] | undo
+    usage: /<command> <player|#source|*> <time> [radius|global] [-p] | area <time> [player] | undo
   glint:
     description: X-ray alerts.
     aliases: [xray]
@@ -108,6 +108,9 @@ permissions:
       shardwatch.notify.*: true
       shardwatch.exempt.bypass: true
       shardwatch.admin.reload: true
+      shardwatch.admin.give: true
+      shardwatch.kit: true
+      shardwatch.tool.*: true
   shardwatch.staff:
     description: Marks a player as staff (Hum, staff counts).
     default: false
@@ -270,4 +273,42 @@ permissions:
     default: op
   shardwatch.admin.reload:
     description: /sw reload
+    default: op
+  shardwatch.admin.give:
+    description: /sw give
+    default: op
+  shardwatch.kit:
+    description: /sw kit — receive the tools your permissions allow.
+    default: op
+  shardwatch.tool.*:
+    description: Use every staff tool.
+    default: op
+    children:
+      shardwatch.tool.echo_lens: true
+      shardwatch.tool.timeglass: true
+      shardwatch.tool.verdict_gavel: true
+      shardwatch.tool.petrify_prism: true
+      shardwatch.tool.veil_lantern: true
+      shardwatch.tool.flare_compass: true
+      shardwatch.tool.glint_monocle: true
+  shardwatch.tool.echo_lens:
+    description: Echo Lens.
+    default: op
+  shardwatch.tool.timeglass:
+    description: Timeglass (also needs shardwatch.rewind).
+    default: op
+  shardwatch.tool.verdict_gavel:
+    description: Verdict Gavel.
+    default: op
+  shardwatch.tool.petrify_prism:
+    description: Petrify Prism (also needs shardwatch.verdict.petrify).
+    default: op
+  shardwatch.tool.veil_lantern:
+    description: Veil Lantern (also needs shardwatch.veil).
+    default: op
+  shardwatch.tool.flare_compass:
+    description: Flare Compass.
+    default: op
+  shardwatch.tool.glint_monocle:
+    description: Glint Monocle (also needs shardwatch.glint.watch).
     default: op

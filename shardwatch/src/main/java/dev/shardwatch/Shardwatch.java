@@ -22,6 +22,8 @@ import dev.shardwatch.profile.ProfileService;
 import dev.shardwatch.scope.ScopeViewer;
 import dev.shardwatch.storage.Database;
 import dev.shardwatch.storage.LogStore;
+import dev.shardwatch.tool.ToolListener;
+import dev.shardwatch.tool.ToolService;
 import dev.shardwatch.util.Durations;
 import dev.shardwatch.verdict.VerdictListener;
 import dev.shardwatch.verdict.VerdictService;
@@ -51,6 +53,8 @@ public final class Shardwatch extends JavaPlugin {
     private GlintTracker glint;
     private FacetService facets;
     private ScopeViewer scope;
+    private ToolService tools;
+    private ToolListener toolListener;
 
     @Override
     public void onEnable() {
@@ -75,8 +79,10 @@ public final class Shardwatch extends JavaPlugin {
         rewind = new RewindEngine(this);
         glint = new GlintTracker(this);
         scope = new ScopeViewer(this);
+        tools = new ToolService(this);
+        toolListener = new ToolListener(this);
 
-        listen(profiles, new VerdictListener(this), facets, echoes, glint);
+        listen(profiles, new VerdictListener(this), facets, echoes, glint, toolListener);
 
         VerdictCommands verdictCommands = new VerdictCommands(this);
         for (String c : new String[]{"chip", "hush", "unhush", "eject", "encase", "unencase", "petrify"}) {
@@ -243,5 +249,13 @@ public final class Shardwatch extends JavaPlugin {
 
     public ScopeViewer scope() {
         return scope;
+    }
+
+    public ToolService tools() {
+        return tools;
+    }
+
+    public ToolListener toolListener() {
+        return toolListener;
     }
 }

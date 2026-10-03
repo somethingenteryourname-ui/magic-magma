@@ -1,0 +1,159 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:select",
+        "property": "minecraft:custom_model_data",
+        "index": 0,
+        "cases": [
+          {
+            "when": "t2",
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_t2"
+            }
+          },
+          {
+            "when": "t3",
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_t3"
+            }
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:model",
+          "model": "shardwatch:item/flare_compass"
+        }
+      },
+      {
+        "type": "minecraft:range_dispatch",
+        "property": "minecraft:compass",
+        "target": "lodestone",
+        "scale": 16.0,
+        "entries": [
+          {
+            "threshold": 0.0,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_00"
+            }
+          },
+          {
+            "threshold": 0.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_01"
+            }
+          },
+          {
+            "threshold": 1.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_02"
+            }
+          },
+          {
+            "threshold": 2.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_03"
+            }
+          },
+          {
+            "threshold": 3.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_04"
+            }
+          },
+          {
+            "threshold": 4.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_05"
+            }
+          },
+          {
+            "threshold": 5.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_06"
+            }
+          },
+          {
+            "threshold": 6.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_07"
+            }
+          },
+          {
+            "threshold": 7.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_08"
+            }
+          },
+          {
+            "threshold": 8.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_09"
+            }
+          },
+          {
+            "threshold": 9.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_10"
+            }
+          },
+          {
+            "threshold": 10.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_11"
+            }
+          },
+          {
+            "threshold": 11.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_12"
+            }
+          },
+          {
+            "threshold": 12.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_13"
+            }
+          },
+          {
+            "threshold": 13.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_14"
+            }
+          },
+          {
+            "threshold": 14.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_15"
+            }
+          },
+          {
+            "threshold": 15.5,
+            "model": {
+              "type": "minecraft:model",
+              "model": "shardwatch:item/flare_compass_needle_00"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

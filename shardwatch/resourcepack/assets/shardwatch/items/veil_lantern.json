@@ -1,0 +1,36 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "shardwatch:item/veil_lantern_unlit"
+    },
+    "on_false": {
+      "type": "minecraft:select",
+      "property": "minecraft:custom_model_data",
+      "index": 0,
+      "cases": [
+        {
+          "when": "t2",
+          "model": {
+            "type": "minecraft:model",
+            "model": "shardwatch:item/veil_lantern_t2"
+          }
+        },
+        {
+          "when": "t3",
+          "model": {
+            "type": "minecraft:model",
+            "model": "shardwatch:item/veil_lantern_t3"
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "shardwatch:item/veil_lantern"
+      }
+    }
+  }
+}

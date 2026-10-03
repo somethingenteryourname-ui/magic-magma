@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:cooldown",
+    "entries": [
+      {
+        "threshold": 0.01,
+        "model": {
+          "type": "minecraft:model",
+          "model": "shardwatch:item/timeglass_drained"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:select",
+      "property": "minecraft:custom_model_data",
+      "index": 0,
+      "cases": [
+        {
+          "when": "t2",
+          "model": {
+            "type": "minecraft:model",
+            "model": "shardwatch:item/timeglass_t2"
+          }
+        },
+        {
+          "when": "t3",
+          "model": {
+            "type": "minecraft:model",
+            "model": "shardwatch:item/timeglass_t3"
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "shardwatch:item/timeglass"
+      }
+    }
+  }
+}

@@ -282,6 +282,9 @@ public final class EchoRecorder implements Listener {
         if (!isInspecting(event.getPlayer()) || event.getHand() != EquipmentSlot.HAND || event.getClickedBlock() == null) {
             return;
         }
+        if (plugin.tools().isTool(event.getItem())) {
+            return;
+        }
         event.setCancelled(true);
         Block b = event.getAction() == Action.RIGHT_CLICK_BLOCK
                 ? event.getClickedBlock().getRelative(event.getBlockFace()) : event.getClickedBlock();

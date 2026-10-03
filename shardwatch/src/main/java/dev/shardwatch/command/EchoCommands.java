@@ -49,6 +49,33 @@ public final class EchoCommands extends BaseCommand {
             plugin.rewind().undo(sender);
             return true;
         }
+        if (args.length >= 2 && args[0].equalsIgnoreCase("area")) {
+            Player p = requirePlayer(sender);
+            Long since = Durations.parse(args[1]);
+            if (p == null) {
+                return true;
+            }
+            if (since == null || since == 0) {
+                plugin.lang().send(sender, "general.bad-duration", Text.p("input", args[1]));
+                return true;
+            }
+            var req = plugin.toolListener().selection(p, args.length > 2 ? args[2] : null, since);
+            if (req == null) {
+                plugin.lang().send(p, "tools.timeglass-no-selection");
+                return true;
+            }
+            int max = plugin.getConfig().getInt("rewind.max-radius", 60) * 2 + 1;
+            if ((req.maxX() - req.minX() + 1 > max || req.maxY() - req.minY() + 1 > max || req.maxZ() - req.minZ() + 1 > max)
+                    && !p.hasPermission("shardwatch.rewind.global")) {
+                plugin.lang().send(p, "rewind.radius-too-big", Text.p("max", max));
+                return true;
+            }
+            if (!preview) {
+                plugin.toolListener().drainTimeglass(p, plugin.getConfig().getInt("tools.timeglass.cooldown-ticks", 100));
+            }
+            plugin.rewind().run(p, req, preview);
+            return true;
+        }
         if (args.length >= 1 && args[0].equalsIgnoreCase("preview")) {
             preview = true;
             args = Arrays.copyOfRange(args, 1, args.length);
@@ -82,7 +109,7 @@ public final class EchoCommands extends BaseCommand {
         }
         if (args.length == 1) {
             List<String> out = new ArrayList<>(Players.onlineNames(args[0]));
-            out.addAll(filter(List.of("undo", "preview", "*", "#tnt", "#creeper", "#fire", "#enderman", "#wither",
+            out.addAll(filter(List.of("undo", "preview", "area", "*", "#tnt", "#creeper", "#fire", "#enderman", "#wither",
                     "#block-explosion"), args[0]));
             return out;
         }
