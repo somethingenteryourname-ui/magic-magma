@@ -1,0 +1,273 @@
+name: Shardwatch
+version: '${version}'
+main: dev.shardwatch.Shardwatch
+api-version: '1.21.11'
+description: '${description}'
+authors: [Shardwatch]
+website: https://github.com/somethingenteryourname-ui/magic-magma
+libraries:
+  - org.xerial:sqlite-jdbc:3.46.1.3
+
+commands:
+  shardwatch:
+    description: Shardwatch hub — help, menu, kit, give, reload.
+    aliases: [sw]
+    usage: /<command> [help|reload|version]
+  flare:
+    description: Send a Flare (report) about a player.
+    aliases: [report]
+    usage: /<command> <player> [category] [reason]
+  flares:
+    description: Open the Flare Board.
+    usage: /<command> [list|all|claim|resolve|dismiss|tp|view] [id]
+  chip:
+    description: Chip (warn) a player.
+    aliases: [warn]
+    usage: /<command> <player> <reason> [-s]
+  hush:
+    description: Hush (mute) a player.
+    aliases: [mute]
+    usage: /<command> <player> [duration] <reason> [-s]
+  unhush:
+    description: Lift a Hush.
+    aliases: [unmute]
+    usage: /<command> <player> [reason]
+  eject:
+    description: Eject (kick) a player.
+    aliases: [kick2]
+    usage: /<command> <player> <reason> [-s]
+  encase:
+    description: Encase (ban) a player, optionally for a time.
+    aliases: [ban2]
+    usage: /<command> <player> [duration] <reason> [-s]
+  unencase:
+    description: Lift an Encase.
+    aliases: [unban2]
+    usage: /<command> <player> [reason]
+  petrify:
+    description: Toggle Petrify (freeze) on a player.
+    aliases: [freeze]
+    usage: /<command> <player>
+  ledger:
+    description: A player's verdict history.
+    aliases: [history]
+    usage: /<command> <player> [page] | revoke <id> [reason]
+  echo:
+    description: Toggle Echo inspect mode (click blocks to see their history).
+    aliases: [inspect]
+    usage: /<command> [page <n>]
+  rewind:
+    description: Rewind (roll back) logged block changes.
+    aliases: [rollback]
+    usage: /<command> <player|#source|*> <time> [radius|global] [-p] | undo
+  glint:
+    description: X-ray alerts.
+    aliases: [xray]
+    usage: /<command> [list|suspects|check|tp|watch|unwatch|handle]
+  facet:
+    description: Staff ranks.
+    aliases: [staffrank]
+    usage: /<command> [list|set|info]
+  hum:
+    description: Staff chat. Without a message, toggles Hum mode.
+    aliases: [sc]
+    usage: /<command> [message]
+  veil:
+    description: Toggle Veil (vanish).
+    aliases: [vanish]
+    usage: /<command> [player]
+  scope:
+    description: Shardscope log viewer.
+    aliases: [logs]
+    usage: /<command> [tab] [window] [u:name r:radius t:time a:action text] [--chat]
+
+permissions:
+  shardwatch.*:
+    description: Everything in Shardwatch.
+    default: op
+    children:
+      shardwatch.staff: true
+      shardwatch.flare: true
+      shardwatch.flares.*: true
+      shardwatch.verdict.*: true
+      shardwatch.ledger: true
+      shardwatch.ledger.revoke: true
+      shardwatch.echo: true
+      shardwatch.rewind: true
+      shardwatch.rewind.global: true
+      shardwatch.glint: true
+      shardwatch.glint.watch: true
+      shardwatch.facet.manage: true
+      shardwatch.facet.manage.any: true
+      shardwatch.hum: true
+      shardwatch.veil: true
+      shardwatch.veil.see: true
+      shardwatch.veil.others: true
+      shardwatch.scope: true
+      shardwatch.scope.*: true
+      shardwatch.notify.*: true
+      shardwatch.exempt.bypass: true
+      shardwatch.admin.reload: true
+  shardwatch.staff:
+    description: Marks a player as staff (Hum, staff counts).
+    default: false
+  shardwatch.flare:
+    description: Send Flares.
+    default: true
+  shardwatch.flare.bypass-cooldown:
+    description: No cooldown between Flares.
+    default: op
+  shardwatch.flares.*:
+    description: Full Flare Board access.
+    default: op
+    children:
+      shardwatch.flares: true
+      shardwatch.flares.handle: true
+      shardwatch.flares.teleport: true
+  shardwatch.flares:
+    description: View the Flare Board.
+    default: op
+  shardwatch.flares.handle:
+    description: Claim, resolve and dismiss Flares.
+    default: op
+  shardwatch.flares.teleport:
+    description: Teleport to Flares.
+    default: op
+  shardwatch.verdict.*:
+    description: Every verdict, including permanent ones and revoking.
+    default: op
+    children:
+      shardwatch.verdict.chip: true
+      shardwatch.verdict.hush: true
+      shardwatch.verdict.hush.permanent: true
+      shardwatch.verdict.hush.unlimited: true
+      shardwatch.verdict.hush.revoke: true
+      shardwatch.verdict.eject: true
+      shardwatch.verdict.encase: true
+      shardwatch.verdict.encase.permanent: true
+      shardwatch.verdict.encase.unlimited: true
+      shardwatch.verdict.encase.revoke: true
+      shardwatch.verdict.petrify: true
+  shardwatch.verdict.chip:
+    description: /chip
+    default: op
+  shardwatch.verdict.hush:
+    description: /hush
+    default: op
+  shardwatch.verdict.hush.permanent:
+    description: Permanent Hush.
+    default: op
+  shardwatch.verdict.hush.unlimited:
+    description: Ignore verdicts.hush.max-duration.
+    default: op
+  shardwatch.verdict.hush.revoke:
+    description: /unhush
+    default: op
+  shardwatch.verdict.eject:
+    description: /eject
+    default: op
+  shardwatch.verdict.encase:
+    description: /encase
+    default: op
+  shardwatch.verdict.encase.permanent:
+    description: Permanent Encase.
+    default: op
+  shardwatch.verdict.encase.unlimited:
+    description: Ignore verdicts.encase.max-duration.
+    default: op
+  shardwatch.verdict.encase.revoke:
+    description: /unencase
+    default: op
+  shardwatch.verdict.petrify:
+    description: /petrify (and commands while petrified).
+    default: op
+  shardwatch.ledger:
+    description: /ledger
+    default: op
+  shardwatch.ledger.revoke:
+    description: Revoke Ledger entries.
+    default: op
+  shardwatch.echo:
+    description: Echo inspect mode.
+    default: op
+  shardwatch.rewind:
+    description: /rewind within the radius and time limits.
+    default: op
+  shardwatch.rewind.global:
+    description: /rewind without radius or time limits.
+    default: op
+  shardwatch.glint:
+    description: /glint
+    default: op
+  shardwatch.glint.watch:
+    description: Spectate Glint suspects.
+    default: op
+  shardwatch.glint.exempt:
+    description: Never tracked by Glint.
+    default: false
+  shardwatch.facet.manage:
+    description: /facet set for ranks below your own.
+    default: op
+  shardwatch.facet.manage.any:
+    description: /facet set for any rank.
+    default: op
+  shardwatch.hum:
+    description: Read and write Hum (staff chat).
+    default: op
+  shardwatch.veil:
+    description: /veil
+    default: op
+  shardwatch.veil.see:
+    description: See Veiled staff.
+    default: op
+  shardwatch.veil.others:
+    description: /veil <player>
+    default: op
+  shardwatch.scope:
+    description: /scope (overview, verdicts, flares, glint tabs).
+    default: op
+  shardwatch.scope.*:
+    description: Every Shardscope tab and teleport.
+    default: op
+    children:
+      shardwatch.scope.blocks: true
+      shardwatch.scope.chat: true
+      shardwatch.scope.staff: true
+      shardwatch.scope.teleport: true
+  shardwatch.scope.blocks:
+    description: Shardscope Blocks tab.
+    default: op
+  shardwatch.scope.chat:
+    description: Shardscope Chat tab.
+    default: op
+  shardwatch.scope.staff:
+    description: Shardscope Staff (audit) tab.
+    default: op
+  shardwatch.scope.teleport:
+    description: Click-to-teleport in Shardscope.
+    default: op
+  shardwatch.notify.*:
+    description: Receive every staff alert.
+    default: op
+    children:
+      shardwatch.notify.flares: true
+      shardwatch.notify.verdicts: true
+      shardwatch.notify.glint: true
+  shardwatch.notify.flares:
+    description: Flare alerts.
+    default: op
+  shardwatch.notify.verdicts:
+    description: Verdict announcements.
+    default: op
+  shardwatch.notify.glint:
+    description: Glint (x-ray) alerts.
+    default: op
+  shardwatch.exempt:
+    description: Can't receive verdicts from staff without exempt.bypass.
+    default: false
+  shardwatch.exempt.bypass:
+    description: Judge exempt or equal/higher Facet players.
+    default: op
+  shardwatch.admin.reload:
+    description: /sw reload
+    default: op

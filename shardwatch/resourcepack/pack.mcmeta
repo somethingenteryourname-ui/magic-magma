@@ -1,0 +1,17 @@
+{
+  "pack": {
+    "description": [
+      {
+        "text": "\u2726 Shardwatch ",
+        "color": "#F59AC8",
+        "bold": true
+      },
+      {
+        "text": "crystal staff suite",
+        "color": "#7FE8E0"
+      }
+    ],
+    "min_format": 75,
+    "max_format": 75
+  }
+}

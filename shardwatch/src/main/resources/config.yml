@@ -1,0 +1,301 @@
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║                     ✦  S H A R D W A T C H  ✦                    ║
+# ║              crystal staff suite for Paper 1.21.11               ║
+# ╚══════════════════════════════════════════════════════════════════╝
+# Durations everywhere: 30s, 10m, 2h, 7d, 2w, 1mo, 1y — combine like 1d12h. "perm" = never ends.
+# Text uses MiniMessage. Palette tags: <pink> <rose> <teal> <ice> <muted> <ok> <bad>.
+# Run /sw reload after editing.
+
+storage:
+  file: shardwatch.db
+  # Old rows are pruned every 6 hours. "perm" keeps them forever.
+  retention:
+    echoes: 30d
+    chat: 14d
+    audit: perm
+
+# ─────────────────────────────────────────────────────────── Verdicts
+verdicts:
+  default-reason: "No reason given"
+  require-reason: true
+  # Optional link shown on the Encase screen.
+  appeal-url: ""
+  # Who sees a verdict announcement: all | staff | none. "-s" always makes it staff-only.
+  broadcast:
+    chip: staff
+    hush: staff
+    eject: all
+    encase: all
+    petrify: staff
+  # Write "#id" as the reason to use one of these.
+  reason-presets:
+    spam: "Spamming chat"
+    toxic: "Toxic or abusive language"
+    grief: "Griefing"
+    xray: "X-ray / ore ESP"
+    hacks: "Unfair client modifications"
+    ads: "Advertising other servers"
+  hush:
+    default-duration: 30m
+    max-duration: 30d
+    blocked-commands: [msg, tell, w, whisper, r, reply, me, say, mail]
+  encase:
+    default-duration: perm
+    max-duration: perm
+    # Ticks between the Encase animation starting and the kick.
+    kick-delay-ticks: 30
+    # Refuse logins when the database can't be read (true) or let them in (false).
+    fail-closed: false
+  petrify:
+    reason: "Held for questioning"
+    persist: true
+    allow-falling: true
+    invulnerable: true
+    allowed-commands: [msg, tell, r, reply, hum, flare, report]
+
+ledger:
+  chat-page-size: 8
+
+# ─────────────────────────────────────────────────────────── Flares
+flares:
+  cooldown-seconds: 60
+  min-reason-length: 0
+  max-reason-length: 200
+  allow-duplicates: false
+  notify-reporter: true
+  teleport-to-target: true
+  categories:
+    hacking:
+      name: "<rose>Unfair Client"
+      icon: flare_hacking
+      description: ["<muted>Fly, reach, kill aura, x-ray…"]
+    griefing:
+      name: "<pink>Griefing"
+      icon: flare_griefing
+      description: ["<muted>Broke or stole from builds"]
+    chat:
+      name: "<teal>Chat Abuse"
+      icon: flare_chat
+      description: ["<muted>Spam, slurs, harassment"]
+    exploit:
+      name: "<ice>Exploit"
+      icon: flare_exploit
+      description: ["<muted>Dupes, glitches, lag machines"]
+    other:
+      name: "<muted>Something Else"
+      icon: flare_other
+      description: ["<muted>Tell us in your own words"]
+
+# ─────────────────────────────────────────────────────────── Echoes & Rewind
+echoes:
+  enabled: true
+  disabled-worlds: []
+  ignored-blocks: [SHORT_GRASS, TALL_GRASS, FIRE, SOUL_FIRE, SNOW]
+  # Non-player mobs whose block changes are logged as #<type>.
+  log-entities: [enderman, wither, ravager, silverfish]
+  inspect-page-size: 7
+
+rewind:
+  default-radius: 15
+  max-radius: 60
+  max-time: 14d
+  max-blocks: 50000
+  blocks-per-tick: 400
+  # Only restore blocks that still look the way the logged change left them.
+  only-matching: true
+  undo-depth: 5
+  preview-seconds: 10
+
+# ─────────────────────────────────────────────────────────── Glint (x-ray)
+glint:
+  enabled: true
+  disabled-worlds: []
+  window-minutes: 15
+  # Alert when score ≥ threshold and the player found at least min-veins veins in the window.
+  threshold: 40
+  min-veins: 3
+  # The divisor never drops below this many mined blocks (stops tiny samples spiking).
+  min-sample: 60
+  # Ores within 2 blocks of the same ore type mined in this many seconds are one vein.
+  vein-seconds: 60
+  # Multiplier for ores that had at most one open face when mined.
+  hidden-bonus: 1.5
+  alert-cooldown-seconds: 120
+  ores:
+    DIAMOND_ORE: 10
+    DEEPSLATE_DIAMOND_ORE: 10
+    ANCIENT_DEBRIS: 14
+    EMERALD_ORE: 8
+    DEEPSLATE_EMERALD_ORE: 8
+    GOLD_ORE: 3
+    DEEPSLATE_GOLD_ORE: 3
+    NETHER_GOLD_ORE: 1
+    LAPIS_ORE: 2
+    DEEPSLATE_LAPIS_ORE: 2
+  counted-blocks: [STONE, DEEPSLATE, TUFF, GRANITE, DIORITE, ANDESITE, CALCITE, NETHERRACK, BASALT, BLACKSTONE,
+                   COBBLED_DEEPSLATE, SMOOTH_BASALT, DRIPSTONE_BLOCK, GRAVEL, DIRT]
+
+# ─────────────────────────────────────────────────────────── Facets (staff ranks)
+facets:
+  # Grant each rank's permissions through Shardwatch. Turn off if LuckPerms manages them;
+  # then give players shardwatch.facet.<id> instead.
+  grant-permissions: true
+  # Higher ranks also get every lower rank's permissions.
+  inherit: true
+  chat-format:
+    enabled: true
+    format: "<sigil><facet_prefix> <name_color><name></name_color> <muted>»</muted> <white><message>"
+  ranks:
+    shardling:
+      name: "<#7FE8E0>Shardling"
+      weight: 10
+      color: "#7FE8E0"
+      prefix: "<#7FE8E0>[<b>Shardling</b>]"
+      sigil: "shardling"
+      permissions:
+        - shardwatch.flares
+        - shardwatch.flares.handle
+        - shardwatch.verdict.chip
+        - shardwatch.hum
+        - shardwatch.scope
+        - shardwatch.notify.flares
+        - shardwatch.ledger
+    prismkeeper:
+      name: "<#F59AC8>Prismkeeper"
+      weight: 20
+      color: "#F59AC8"
+      prefix: "<#F59AC8>[<b>Prismkeeper</b>]"
+      sigil: "prismkeeper"
+      permissions:
+        - shardwatch.verdict.hush
+        - shardwatch.verdict.hush.revoke
+        - shardwatch.verdict.eject
+        - shardwatch.verdict.petrify
+        - shardwatch.flares.teleport
+        - shardwatch.echo
+        - shardwatch.veil
+        - shardwatch.veil.see
+        - shardwatch.scope.blocks
+        - shardwatch.scope.chat
+        - shardwatch.scope.teleport
+        - shardwatch.notify.verdicts
+    lumenwarden:
+      name: "<#B7F2FF>Lumenwarden"
+      weight: 30
+      color: "#B7F2FF"
+      prefix: "<#B7F2FF>[<b>Lumenwarden</b>]"
+      sigil: "lumenwarden"
+      permissions:
+        - shardwatch.verdict.encase
+        - shardwatch.verdict.encase.revoke
+        - shardwatch.verdict.hush.permanent
+        - shardwatch.ledger.revoke
+        - shardwatch.rewind
+        - shardwatch.glint
+        - shardwatch.glint.watch
+        - shardwatch.notify.glint
+        - shardwatch.facet.manage
+        - shardwatch.scope.staff
+    crownfacet:
+      name: "<gradient:#FFC7E6:#7FE8E0>Crownfacet</gradient>"
+      weight: 40
+      color: "#FFC7E6"
+      prefix: "<gradient:#FFC7E6:#7FE8E0>[<b>Crownfacet</b>]</gradient>"
+      sigil: "crownfacet"
+      permissions:
+        - shardwatch.*
+
+chat-log:
+  # Commands that are never written to the chat log (passwords etc.).
+  ignored-commands: [login, l, register, reg, changepassword, cp]
+
+# ─────────────────────────────────────────────────────────── Shardscope
+scope:
+  # /scope opens the book view; add --chat for chat. Set false to flip that around.
+  book-by-default: true
+  rows-per-page: 4
+  rows-per-window: 60
+  chat-rows: 12
+
+# ─────────────────────────────────────────────────────────── Effects
+# sounds:    "namespace:sound.key volume pitch [delayTicks]"
+# particles: "PARTICLE count dx dy dz speed [#color] [#color2] [size]"
+fx:
+  enabled: true
+  animations: true
+  presets:
+    verdict-chip:
+      sounds: ["minecraft:block.amethyst_block.hit 1 1.6", "minecraft:block.note_block.chime 0.6 1.2 2"]
+      particles: ["DUST 14 0.4 0.6 0.4 0 #F7C6DF 1.1"]
+    verdict-hush:
+      sounds: ["minecraft:block.amethyst_cluster.place 1 0.8"]
+      particles: ["DUST_COLOR_TRANSITION 18 0.3 0.3 0.3 0 #7FE8E0 #FFFFFF 1.0"]
+    verdict-eject:
+      sounds: ["minecraft:entity.illusioner.mirror_move 1 1.4"]
+      particles: ["DUST 24 0.5 0.8 0.5 0 #F59AC8 1.3"]
+    verdict-encase:
+      sounds: ["minecraft:block.amethyst_block.resonate 1 0.6", "minecraft:block.glass.break 0.8 0.7 20"]
+      particles: ["DUST_COLOR_TRANSITION 40 0.5 1.0 0.5 0 #D9468F #7FE8E0 1.4"]
+    verdict-petrify:
+      sounds: ["minecraft:block.amethyst_block.place 1 0.5", "minecraft:entity.player.hurt_freeze 0.6 1.4 3"]
+      particles: ["DUST_COLOR_TRANSITION 30 0.4 0.9 0.4 0 #B7F2FF #FFFFFF 1.2"]
+    verdict-unpetrify:
+      sounds: ["minecraft:block.amethyst_cluster.break 1 1.3"]
+      particles: ["DUST 20 0.4 0.9 0.4 0 #F59AC8 1.0"]
+    flare-send:
+      sounds: ["minecraft:block.amethyst_block.chime 1 1.4", "minecraft:entity.firework_rocket.launch 0.4 1.6 2"]
+      particles: []
+    flare-alert:
+      sounds: ["minecraft:block.note_block.bell 0.8 1.6", "minecraft:block.note_block.bell 0.6 2.0 4"]
+      particles: []
+    flare-claim:
+      sounds: ["minecraft:block.amethyst_block.hit 1 1.2"]
+      particles: []
+    flare-resolve:
+      sounds: ["minecraft:entity.player.levelup 0.5 1.8"]
+      particles: []
+    flare-dismiss:
+      sounds: ["minecraft:block.amethyst_block.step 1 0.8"]
+      particles: []
+    echo-inspect:
+      sounds: ["minecraft:block.amethyst_block.chime 0.7 1.8"]
+      particles: ["DUST 8 0.3 0.3 0.3 0 #7FE8E0 0.8"]
+    rewind-block:
+      sounds: []
+      particles: ["DUST_COLOR_TRANSITION 4 0.3 0.3 0.3 0 #7FE8E0 #F59AC8 0.9"]
+    rewind-done:
+      sounds: ["minecraft:block.beacon.activate 0.7 1.6", "minecraft:block.amethyst_block.resonate 0.8 1.4 4"]
+      particles: ["END_ROD 20 0.5 0.8 0.5 0.02"]
+    rewind-undo:
+      sounds: ["minecraft:block.beacon.deactivate 0.7 1.6"]
+      particles: []
+    glint-alert:
+      sounds: ["minecraft:block.note_block.pling 0.8 2.0", "minecraft:block.amethyst_block.chime 0.8 0.8 3"]
+      particles: []
+    hum:
+      sounds: ["minecraft:block.amethyst_cluster.hit 0.35 1.8"]
+      particles: []
+    veil-on:
+      sounds: ["minecraft:entity.illusioner.cast_spell 0.8 1.4"]
+      particles: ["DUST_COLOR_TRANSITION 30 0.4 0.9 0.4 0 #F59AC8 #7FE8E0 1.2"]
+    veil-off:
+      sounds: ["minecraft:entity.illusioner.prepare_mirror 0.8 1.4"]
+      particles: ["DUST_COLOR_TRANSITION 30 0.4 0.9 0.4 0 #7FE8E0 #F59AC8 1.2"]
+    facet-promote:
+      sounds: ["minecraft:ui.toast.challenge_complete 0.7 1.4"]
+      particles: ["TOTEM_OF_UNDYING 40 0.5 1 0.5 0.3"]
+    warp-out:
+      sounds: ["minecraft:entity.enderman.teleport 0.6 1.6"]
+      particles: ["DUST 16 0.3 0.8 0.3 0 #F59AC8 1.0"]
+    warp-in:
+      sounds: ["minecraft:block.amethyst_block.chime 1 1.6"]
+      particles: ["DUST 16 0.3 0.8 0.3 0 #7FE8E0 1.0"]
+    scope-open:
+      sounds: ["minecraft:item.book.page_turn 1 1.2"]
+      particles: []
+    tool-equip:
+      sounds: ["minecraft:block.amethyst_block.place 0.8 1.6"]
+      particles: []
+    ui-back:
+      sounds: ["minecraft:block.amethyst_block.step 0.8 1.2"]
+      particles: []

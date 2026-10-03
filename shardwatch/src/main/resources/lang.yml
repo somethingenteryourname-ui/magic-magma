@@ -1,0 +1,305 @@
+# Shardwatch messages (MiniMessage). Palette tags: <pink> <rose> <teal> <ice> <muted> <ok> <bad>.
+# Every message can use <prefix>. Set a message to "" to silence it.
+
+prefix: "<gradient:#F59AC8:#7FE8E0><b>✦ Shardwatch</b></gradient> <dark_gray>»</dark_gray> "
+
+general:
+  db-error: "<prefix><bad>The crystal ledger could not be read. Check the console."
+  no-permission: "<prefix><bad>You lack the facet for that. <muted>(<permission>)"
+  players-only: "<prefix><bad>Only players can do that."
+  unknown-player: "<prefix><bad><player></bad> <muted>has never joined this server."
+  not-online: "<prefix><bad><player></bad> <muted>is not online."
+  bad-duration: "<prefix><bad>'<input>' is not a duration. <muted>Try 30m, 2h, 7d, 1w2d or perm."
+  unknown-world: "<prefix><bad>No world called <world>."
+  permanent: "permanent"
+  never: "never"
+
+help:
+  - "<gradient:#F59AC8:#7FE8E0>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gradient>"
+  - "  <gradient:#F59AC8:#7FE8E0><b>✦ SHARDWATCH</b></gradient> <muted>crystal staff suite"
+  - "  <pink>/flare <player> [category] [reason]</pink> <muted>send a Flare (report)"
+  - "  <pink>/flares</pink> <muted>the Flare Board"
+  - "  <pink>/chip /hush /eject /encase /petrify</pink> <muted>verdicts"
+  - "  <pink>/ledger <player></pink> <muted>verdict history"
+  - "  <teal>/echo</teal> <muted>inspect mode · </muted><teal>/rewind <who> <time> [radius]</teal>"
+  - "  <teal>/glint</teal> <muted>x-ray alerts · </muted><teal>/facet</teal> <muted>staff ranks"
+  - "  <teal>/hum</teal> <muted>staff chat · </muted><teal>/veil</teal> <muted>vanish · </muted><teal>/scope</teal> <muted>logs"
+  - "<gradient:#7FE8E0:#F59AC8>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gradient>"
+
+usage:
+  chip: "<prefix><muted>Usage: <pink>/<label> <player> <reason|#preset> [-s]"
+  hush: "<prefix><muted>Usage: <pink>/<label> <player> [duration] <reason|#preset> [-s]"
+  unhush: "<prefix><muted>Usage: <pink>/<label> <player> [reason]"
+  eject: "<prefix><muted>Usage: <pink>/<label> <player> <reason|#preset> [-s]"
+  encase: "<prefix><muted>Usage: <pink>/<label> <player> [duration] <reason|#preset> [-s]"
+  unencase: "<prefix><muted>Usage: <pink>/<label> <player> [reason]"
+  petrify: "<prefix><muted>Usage: <pink>/<label> <player>"
+  ledger: "<prefix><muted>Usage: <pink>/<label> <player> [page]</pink> or <pink>/<label> revoke <id> [reason]"
+  flare: "<prefix><muted>Usage: <pink>/<label> <player> [category] [reason]"
+  rewind: "<prefix><muted>Usage: <teal>/<label> <player|#tnt|#fire|*> <time> [radius|global] [-p]</teal> or <teal>/<label> undo"
+  glint: "<prefix><muted>Usage: <teal>/<label> [list|suspects|check|tp|watch|unwatch|handle] [player|id]"
+  facet: "<prefix><muted>Usage: <teal>/<label> set <player> <facet|none>"
+
+# ─────────────────────────────────────────── Verdicts
+verdict:
+  names:
+    chip: "<#F7C6DF>Chip"
+    hush: "<#7FE8E0>Hush"
+    eject: "<#F59AC8>Eject"
+    encase: "<#D9468F>Encase"
+    petrify: "<#B7F2FF>Petrify"
+  self: "<prefix><bad>You can't pass a verdict on yourself."
+  exempt: "<prefix><bad><player> is shielded from verdicts."
+  outranked: "<prefix><bad><player> holds an equal or higher Facet."
+  no-permanent: "<prefix><bad>You can't make a <type> permanent."
+  too-long: "<prefix><bad>That's longer than your limit of <max>."
+  need-reason: "<prefix><bad>Give a reason (or a preset like <pink>#spam</pink>)."
+  silent-tag: " <muted><i>(silent)"
+  chip:
+    target: "<prefix><#F7C6DF>◆ You were chipped by <actor>:</#F7C6DF> <white><reason>"
+    title: "<gradient:#F7C6DF:#F59AC8><b>CHIPPED</b></gradient>"
+    subtitle: "<muted><reason>"
+    announce: "<prefix><#F7C6DF>◆ <white><player></white> was chipped by <actor>: <muted><reason>"
+  hush:
+    target: "<prefix><#7FE8E0>◆ You've been hushed for <duration>:</#7FE8E0> <white><reason>"
+    announce: "<prefix><#7FE8E0>◆ <white><player></white> was hushed for <duration> by <actor>: <muted><reason>"
+    blocked: "<prefix><#7FE8E0>You're hushed (<remaining> left): <muted><reason>"
+  eject:
+    announce: "<prefix><#F59AC8>◆ <white><player></white> was ejected by <actor>: <muted><reason>"
+  encase:
+    announce: "<prefix><#D9468F>◆ <white><player></white> was encased (<duration>) by <actor>: <muted><reason>"
+    check-failed: "<bad>The server couldn't check your account. Try again in a moment."
+  petrify:
+    target: "<prefix><#B7F2FF>◆ You've been petrified. Stay put and talk to staff — <white>/msg</white> still works."
+    title: "<gradient:#B7F2FF:#7FE8E0><b>PETRIFIED</b></gradient>"
+    subtitle: "<muted>A staff member will be with you shortly"
+    announce: "<prefix><#B7F2FF>◆ <white><player></white> was petrified by <actor>."
+    no-commands: "<prefix><#B7F2FF>You can't use that while petrified."
+    still: "<prefix><#B7F2FF>You're still petrified. Please wait for staff."
+    logout: "<prefix><bad>⚠ <player> logged out while petrified!"
+  revoke:
+    none: "<prefix><muted><player> has no active <type>."
+    announce: "<prefix><ok>◆ <actor> lifted <player>'s <type>: <muted><reason>"
+    target: "<prefix><ok>Your <type> was lifted."
+
+screens:
+  encase:
+    - "<gradient:#D9468F:#7FE8E0><b>✦ ENCASED IN CRYSTAL ✦</b></gradient>"
+    - ""
+    - "<white><reason>"
+    - ""
+    - "<muted>Length: <pink><duration></pink>  ·  Ends: <pink><expires></pink>"
+    - "<muted>Verdict <pink>#<id></pink> by <pink><actor></pink> on <date>"
+    - ""
+    - "<teal><appeal>"
+  eject:
+    - "<gradient:#F59AC8:#7FE8E0><b>✦ EJECTED ✦</b></gradient>"
+    - ""
+    - "<white><reason>"
+    - ""
+    - "<muted>by <pink><actor>"
+
+ledger:
+  header: "<prefix><gradient:#F59AC8:#7FE8E0><b>Ledger</b></gradient> <white><player></white> <muted>p<page> · <#F7C6DF><chips> chips</#F7C6DF> · <#7FE8E0><hushes> hushes</#7FE8E0> · <#F59AC8><ejects> ejects</#F59AC8> · <#D9468F><encases> encases</#D9468F>"
+  empty: "<muted>  A spotless record."
+  row: "  <muted>#<id></muted> <type_color><type_name></type_color> <status_tag> <muted><ago></muted> <white><reason>"
+  row-hover: "<type_color><b><type_name></b> #<id></type_color><newline><muted>By:</muted> <actor><newline><muted>When:</muted> <date><newline><muted>Length:</muted> <duration><newline><muted>Ends:</muted> <expires><newline><muted>Status:</muted> <status><newline><white><reason>"
+  status:
+    active: "<ok>●"
+    expired: "<muted>○"
+    revoked: "<bad>✕"
+    logged: "<muted>·"
+  revoke-button: " <bad>[revoke]"
+  prev: "<pink>« previous  "
+  next: "<pink>next »"
+  no-entry: "<prefix><bad>No Ledger entry #<id>."
+  revoked: "<prefix><ok>Ledger entry #<id> revoked."
+  already-revoked: "<prefix><muted>Entry #<id> was already revoked."
+
+# ─────────────────────────────────────────── Flares
+flare:
+  self: "<prefix><bad>You can't Flare yourself."
+  cooldown: "<prefix><bad>Your last Flare is still burning. Wait <seconds>s."
+  reason-too-short: "<prefix><bad>Tell us a bit more (at least <min> characters)."
+  duplicate: "<prefix><muted>You already have an open Flare about <player>."
+  filed: "<prefix><ok>✦ Flare #<id> sent about <player>. <muted>Staff have been alerted."
+  alert: "<prefix><pink>✦ Flare #<id></pink> <muted><reporter> →</muted> <white><player></white> <muted>[<category><muted>]</muted> <white><reason></white> <click:run_command:'/flares claim <id>'><hover:show_text:'<ok>Claim this Flare'><ok>[claim]</ok></hover></click> <click:run_command:'/flares tp <id>'><hover:show_text:'<teal>Teleport there'><teal>[tp]</teal></hover></click>"
+  claimed: "<prefix><teal>✦ <handler> claimed Flare #<id> <muted>(<player>)"
+  cannot-claim: "<prefix><bad>Flare #<id> is not open."
+  cannot-close: "<prefix><bad>Flare #<id> is already closed (or doesn't exist)."
+  resolved: "<prefix><ok>✦ Flare #<id> resolved: <muted><resolution>"
+  dismissed: "<prefix><muted>✦ Flare #<id> dismissed: <resolution>"
+  reporter-resolved: "<prefix><ok>✦ Your Flare about <player> was handled. Thank you!"
+  reporter-dismissed: "<prefix><muted>✦ Your Flare about <player> was reviewed: <resolution>"
+  no-location: "<prefix><bad>That Flare's world is gone."
+  join-summary: "<prefix><pink>✦ <count> open Flare(s) are waiting.</pink> <click:run_command:'/flares'><teal>[open board]"
+  not-found: "<prefix><bad>No Flare #<id>."
+  view:
+    - "<gradient:#F59AC8:#7FE8E0><b>Flare #<id></b></gradient> <muted>(<status>)"
+    - "  <muted>About:</muted> <white><player></white>   <muted>From:</muted> <white><reporter>"
+    - "  <muted>Category:</muted> <category>   <muted>Filed:</muted> <ago>"
+    - "  <muted>Where:</muted> <world> <x> <y> <z>"
+    - "  <muted>Reason:</muted> <white><reason>"
+    - "  <muted>Handler:</muted> <handler>   <muted>Outcome:</muted> <resolution>"
+  board-header: "<prefix><gradient:#F59AC8:#7FE8E0><b>Flare Board</b></gradient> <muted><filter> · page <page>"
+  filter-open: "open"
+  filter-all: "all"
+  board-empty: "<muted>  No Flares here. ✦"
+  board-row: "  <pink>#<id></pink> <muted><ago></muted> <white><player></white> <muted>[<category><muted>]</muted> <status>"
+  board-hover: "<white><reason><newline><muted>From <reporter> · <world> <x> <y> <z><newline><muted>Handler: <handler>"
+  button-claim: "<ok>[claim]</ok> "
+  button-tp: "<teal>[tp]</teal> "
+  button-resolve: "<ok>[resolve]</ok> "
+  button-dismiss: "<bad>[dismiss]"
+  prev: "<pink>« previous  "
+  next: "<pink>next »"
+
+# ─────────────────────────────────────────── Echoes & Rewind
+echo:
+  inspect-on: "<prefix><teal>Echo inspect on.</teal> <muted>Left-click a block for its history, right-click for the block on that face."
+  inspect-off: "<prefix><muted>Echo inspect off."
+  header: "<prefix><teal><b>Echoes</b></teal> <muted><world> <x> <y> <z> · page <page>"
+  empty: "<muted>  No echoes here."
+  rewound-tag: " <muted><i>(rewound)"
+  row:
+    break: "  <muted><ago></muted> <white><actor></white> <rose>broke</rose> <white><old></white><rewound>"
+    place: "  <muted><ago></muted> <white><actor></white> <ok>placed</ok> <white><new></white><rewound>"
+    explode: "  <muted><ago></muted> <white><actor></white> <rose>blew up</rose> <white><old></white><rewound>"
+    burn: "  <muted><ago></muted> <white><actor></white> <rose>burned</rose> <white><old></white><rewound>"
+    bucket_empty: "  <muted><ago></muted> <white><actor></white> <teal>poured</teal> <white><new></white><rewound>"
+    bucket_fill: "  <muted><ago></muted> <white><actor></white> <teal>scooped</teal> <white><old></white><rewound>"
+    entity: "  <muted><ago></muted> <white><actor></white> <ice>changed</ice> <white><old> → <new></white><rewound>"
+  row-hover: "<teal>Echo #<id></teal> <muted>(<action>)<newline><muted>Before:</muted> <old_full><newline><muted>After:</muted> <new_full><newline><muted>At:</muted> <world> <x> <y> <z><newline><pink>Click to prepare a rewind"
+  prev: "<teal>« older  "
+  next: "<teal>newer »"
+  nothing-inspected: "<prefix><muted>Inspect a block first."
+
+rewind:
+  need-radius: "<prefix><bad>Give a radius (or ask for shardwatch.rewind.global)."
+  radius-too-big: "<prefix><bad>Radius is capped at <max>."
+  time-too-long: "<prefix><bad>You can rewind at most <max>."
+  busy: "<prefix><bad>Your Timeglass is still running."
+  start: "<prefix><teal>⌛ Rewinding <white><actor></white> over <time> in radius <radius>…"
+  preview-start: "<prefix><teal>⌛ Looking for <white><actor></white>'s echoes over <time> in radius <radius>…"
+  nothing: "<prefix><muted>No echoes to rewind for <actor> in that range."
+  preview: "<prefix><teal><count> block(s) would be rewound.</teal> <muted>They're shimmering now. Run the same command without -p to rewind."
+  progress: "<teal>⌛ <done>/<total>"
+  done: "<prefix><ok>⌛ Rewound <count> block(s).</ok> <muted><skipped> skipped (changed since).</muted> <click:run_command:'/rewind undo'><hover:show_text:'Put them back'><pink>[undo]"
+  nothing-to-undo: "<prefix><muted>Nothing to undo."
+  undone: "<prefix><ok>⌛ Undid the last rewind (<count> blocks)."
+
+# ─────────────────────────────────────────── Glint
+glint:
+  alert: "<prefix><gradient:#7FE8E0:#B7F2FF><b>◈ Glint</b></gradient> <white><player></white> <muted>found <ore> · score <pink><score></pink> · <veins> veins / <mined> mined</muted> <click:run_command:'/glint tp <player>'><hover:show_text:'Teleport to <player>'><teal>[tp]</teal></hover></click> <click:run_command:'/glint watch <player>'><hover:show_text:'Spectate <player>'><teal>[watch]</teal></hover></click> <click:run_command:'/ledger <player>'><hover:show_text:'Open Ledger'><pink>[ledger]</pink></hover></click> <click:run_command:'/glint handle <id>'><hover:show_text:'Mark handled'><ok>[✔]</ok></hover></click>"
+  check: "<prefix><teal>◈ <player></teal> <muted>score <pink><score></pink>/<threshold> · <veins> veins in <mined> blocks (last <window>)"
+  header: "<prefix><gradient:#7FE8E0:#B7F2FF><b>Glint alerts</b></gradient> <muted>page <page>"
+  none: "<muted>  Nothing glinting."
+  row: "  <pink>#<id></pink> <muted><ago></muted> <white><player></white> <muted><ore> · score <pink><score>"
+  row-handled: "  <muted>#<id> <ago> <player> <ore> · score <score> · ✔ <handled>"
+  row-hover: "<muted>At <world> <x> <y> <z><newline><teal>Click to teleport"
+  suspects-header: "<prefix><teal><b>Live Glint scores</b>"
+  suspect-row: "  <white><player></white> <muted>score</muted> <pink><score></pink> <teal>[watch]"
+  watching: "<prefix><teal>◈ Watching <player>. <muted>/glint unwatch to return."
+  unwatched: "<prefix><teal>◈ Back where you were."
+  not-watching: "<prefix><muted>You aren't watching anyone."
+  handled: "<prefix><ok>Glint #<id> marked handled."
+  already-handled: "<prefix><muted>Glint #<id> was already handled."
+
+# ─────────────────────────────────────────── Facets, Hum, Veil
+facet:
+  none: "<muted>none"
+  too-high: "<prefix><bad>You can only manage Facets below your own."
+  unknown: "<prefix><bad>No Facet called <facet>."
+  changed: "<prefix><ok>✦ <player>: <before> <muted>→</muted> <facet>"
+  changed-target: "<prefix>✦ Your Facet is now <facet>."
+  info: "<prefix><white><player></white> <muted>Facet</muted> <facet> <muted>(weight <weight>) · Lustre <pink><lustre></pink> (lifetime <lifetime>)"
+  list-header: "<prefix><gradient:#F59AC8:#7FE8E0><b>Facets</b></gradient>"
+  list-row: "  <facet> <muted>id <id> · weight <weight> · <perms> perms · <online> online"
+
+hum:
+  format: "<gradient:#B7F2FF:#F59AC8>[Hum]</gradient> <facet_prefix> <color><sender></color><dark_gray>:</dark_gray> <ice><message>"
+  mode-on: "<prefix><ice>Hum mode on — your chat goes to staff only."
+  mode-off: "<prefix><muted>Hum mode off."
+
+veil:
+  on: "<prefix><pink>✧ You are Veiled.</pink> <muted>Players can't see you."
+  off: "<prefix><teal>✧ Veil lifted.</teal> <muted>You're visible again."
+  staff-on: "<prefix><muted><player> slipped behind the Veil."
+  staff-off: "<prefix><muted><player> stepped out of the Veil."
+  still: "<prefix><pink>✧ You are still Veiled."
+
+# ─────────────────────────────────────────── Shardscope
+# Book pages are 19 characters wide and 14 lines tall, so book lines use short placeholders.
+# Book text sits on parchment: use the dark book colours below rather than the light palette.
+scope:
+  book-name: "Shardscope"
+  book-rule: "<#C98AA8>━━━━━━━━━━━━━━━━━━━"
+  book-title: "<#8A1F57><b><tab></b></#8A1F57> <#5E6670><page>/<pages>"
+  empty: "<#5E6670><i>Nothing here yet."
+  tab-active: "<#8A1F57><u><b><label></b></u></#8A1F57>"
+  tab-idle: "<#0E6F6A><label></#0E6F6A>"
+  tab-active-chat: "<gradient:#F59AC8:#7FE8E0><b>[<label>]</b></gradient>"
+  tab-idle-chat: "<muted><label>"
+  tabs:
+    overview: {icon: "⌂", name: "Overview", hover: "<pink>Overview<newline><muted>Live counts at a glance"}
+    blocks: {icon: "▦", name: "Blocks", hover: "<pink>Blocks<newline><muted>Echoes: placed, broken, exploded…<newline>u:name r:radius t:time a:action"}
+    chat: {icon: "✉", name: "Chat", hover: "<pink>Chat<newline><muted>Chat, commands and Hum"}
+    verdicts: {icon: "⚖", name: "Verdicts", hover: "<pink>Verdicts<newline><muted>Chips, Hushes, Ejects, Encases"}
+    flares: {icon: "✦", name: "Flares", hover: "<pink>Flares<newline><muted>Every report and its outcome"}
+    glint: {icon: "◈", name: "Glint", hover: "<pink>Glint<newline><muted>X-ray alerts"}
+    staff: {icon: "☰", name: "Staff", hover: "<pink>Staff<newline><muted>Audit trail of staff actions"}
+  prev: "<#0E6F6A>◀ "
+  prev-window: "<#8A1F57>◀◀ "
+  prev-off: "<#C9C2B8>◀ "
+  next: "<#0E6F6A> ▶"
+  next-window: "<#8A1F57> ▶▶"
+  next-off: "<#C9C2B8> ▶"
+  page-label: "<#5E6670>   <page> / <pages>   "
+  overview:
+    - "<#5E6670>Open Flares   <#8A1F57><b><flares>"
+    - "<#5E6670>Encased       <#8A1F57><b><encased>"
+    - "<#5E6670>Hushed        <#0E6F6A><b><hushed>"
+    - "<#5E6670>Petrified     <#0E6F6A><b><petrified>"
+    - "<#5E6670>Echoes 24h    <#0E6F6A><b><echoes>"
+    - "<#5E6670>Chat 24h      <#0E6F6A><b><chats>"
+    - "<#5E6670>Glint 24h     <#8A1F57><b><glints>"
+    - "<#5E6670>Staff acts    <#0E6F6A><b><audits>"
+    - "<#5E6670>Staff online  <#0E6F6A><b><staff></b><#5E6670>/<online>"
+  blocks:
+    line1: "<#8A1F57>◆</#8A1F57> <#2F3640><actor_s></#2F3640> <#7C858F><ago_s>"
+    line2:
+      break: "  <#B0306F>-</#B0306F><#2F3640><old_s>"
+      place: "  <#0E6F6A>+</#0E6F6A><#2F3640><new_s>"
+      explode: "  <#B0306F>✸</#B0306F><#2F3640><old_s>"
+      burn: "  <#B0306F>♨</#B0306F><#2F3640><old_s>"
+      bucket_empty: "  <#0E6F6A>≈</#0E6F6A><#2F3640><new_s>"
+      bucket_fill: "  <#0E6F6A>∪</#0E6F6A><#2F3640><old_s>"
+      entity: "  <#5E6670>~</#5E6670><#2F3640><new_s>"
+    hover: "<teal>Echo #<id></teal> <muted><action> · <ago><newline><white><actor><newline><muted>Before:</muted> <old_full><newline><muted>After:</muted> <new_full><newline><muted><world> <x> <y> <z><newline><pink>Click to teleport"
+  chat:
+    line1: "<#0E6F6A>✉</#0E6F6A> <#2F3640><name_s></#2F3640> <#7C858F><ago_s>"
+    line2: "  <#4A525C><short>"
+    hover: "<white><player></white> <muted>(<kind>) <date><newline><white><message><newline><pink>Click: only this player"
+  verdicts:
+    line1: "<#8A1F57>⚖</#8A1F57> <#2F3640><name_s></#2F3640> <#7C858F><ago_s>"
+    line2: "  <type_color><type_name></type_color> <#4A525C>#<id>"
+    hover: "<type_color><b><type_name></b> #<id></type_color><newline><muted>Target:</muted> <player><newline><muted>By:</muted> <actor><newline><muted>Length:</muted> <duration> · <status><newline><white><reason><newline><pink>Click to open Ledger"
+  flares:
+    line1: "<#8A1F57>✦</#8A1F57> <#2F3640><name_s></#2F3640> <#7C858F><ago_s>"
+    line2: "  <#4A525C>#<id> <status>"
+    hover: "<pink>Flare #<id></pink> <muted>(<status>)<newline><muted>From:</muted> <reporter><newline><muted>Category:</muted> <category><newline><white><reason><newline><muted>Handler:</muted> <handler><newline><pink>Click to view"
+  glint:
+    line1: "<#0E6F6A>◈</#0E6F6A> <#2F3640><name_s></#2F3640> <#7C858F><ago_s>"
+    line2: "  <#4A525C><ore> <#8A1F57><score>"
+    hover: "<teal>Glint</teal> <muted><ago><newline><white><player></white> <muted>found <ore><newline><muted>Score:</muted> <score><newline><muted><world> <x> <y> <z><newline><muted>Handled by <handled><newline><pink>Click to teleport"
+  staff:
+    line1: "<#0E6F6A>☰</#0E6F6A> <#2F3640><name_s></#2F3640> <#7C858F><ago_s>"
+    line2: "  <#4A525C><action>"
+    hover: "<white><actor></white> <muted><date><newline><pink><action><newline><white><detail>"
+  chat-top: "<gradient:#F59AC8:#7FE8E0>━━━━━━━━━━━ ✦ Shardscope · <tab> ✦ ━━━━━━━━━━━</gradient> <muted>filter: <filter>"
+  chat-page: "<muted>  window <window>  "
+  chat-bottom: "<gradient:#7FE8E0:#F59AC8>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gradient>"
+
+admin:
+  reloaded: "<prefix><ok>Reloaded in <ms> ms."
+  version: "<prefix><muted>Shardwatch <pink><version>"
