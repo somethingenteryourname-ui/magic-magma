@@ -5,6 +5,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,14 +19,69 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pack tooling
+        run: pip install pillow numpy pyyaml
+
+      - name: Check the resource pack against the Look & textures list
+        run: STRICT=1 python shardwatch/tools/check_pack.py --stage 6
+
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build plugin jar
+      - name: Build plugins, run tests, zip the resource pack
         run: ./gradlew build --no-daemon
 
-      - name: Upload plugin jar
+      - name: Report the pack SHA-1
+        run: |
+          SHA1=$(cat shardwatch/build/pack/Shardwatch-pack.zip.sha1)
+          echo "PACK_SHA1=$SHA1" >> "$GITHUB_ENV"
+          {
+            echo "### Shardwatch resource pack"
+            echo ""
+            echo "SHA-1: \`$SHA1\`"
+            echo ""
+            echo '```properties'
+            echo "resource-pack=https://github.com/${{ github.repository }}/releases/download/pack-latest/Shardwatch-pack.zip"
+            echo "resource-pack-sha1=$SHA1"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload plugin jars
         uses: actions/upload-artifact@v4
         with:
-          name: CrystallineResonance
-          path: build/libs/*.jar
+          name: plugins
+          path: |
+            build/libs/*.jar
+            shardwatch/build/libs/*.jar
           if-no-files-found: error
+
+      - name: Upload resource pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: Shardwatch-pack
+          path: |
+            shardwatch/build/pack/Shardwatch-pack.zip
+            shardwatch/build/pack/Shardwatch-pack.zip.sha1
+          if-no-files-found: error
+
+      # On the default branch, refresh the "pack-latest" release so server.properties can point at a stable URL.
+      - name: Publish pack-latest release
+        if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES="Latest Shardwatch resource pack. SHA-1: ${PACK_SHA1}
+
+          resource-pack=https://github.com/${{ github.repository }}/releases/download/pack-latest/Shardwatch-pack.zip
+          resource-pack-sha1=${PACK_SHA1}"
+          if ! gh release view pack-latest >/dev/null 2>&1; then
+            gh release create pack-latest --title "Shardwatch resource pack (latest)" --notes "$NOTES" --latest=false
+          fi
+          gh release upload pack-latest \
+            shardwatch/build/pack/Shardwatch-pack.zip \
+            shardwatch/build/pack/Shardwatch-pack.zip.sha1 \
+            shardwatch/build/libs/Shardwatch-1.0.0.jar --clobber
+          gh release edit pack-latest --notes "$NOTES"

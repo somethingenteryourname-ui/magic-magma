@@ -194,4 +194,6 @@ GitHub Actions builds both jars, zips the pack deterministically, computes SHA-1
 | item_model, no vanilla overrides | `assets/shardwatch/items/*.json` only. Nothing in `assets/minecraft/`. Chat sigils and GUI backgrounds use the custom fonts `shardwatch:sigils` and `shardwatch:gui`. | no file under `assets/minecraft/` |
 
 ## 5. Build order
-1. Core → 2. Content → 3. GUI → 4. Progression → 5. Polish → 6. Admin. Each stage is its own commit, followed by a stage report.
+1. Core → 2. Content → 3. GUI → 4. Progression → 5. Polish → 6. Admin. Each stage is its own commit, followed by a stage report
+([stage-1](stage-reports/stage-1.md) · [2](stage-reports/stage-2.md) · [3](stage-reports/stage-3.md) ·
+[4](stage-reports/stage-4.md) · [5](stage-reports/stage-5.md) · [6](stage-reports/stage-6.md)).

@@ -6,6 +6,30 @@
 # Text uses MiniMessage. Palette tags: <pink> <rose> <teal> <ice> <muted> <ok> <bad>.
 # Run /sw reload after editing.
 
+config-version: 1
+
+# ─────────────────────────────────────────────────────────── Resource pack
+# The easy way is server.properties (see the README): resource-pack=<url>, resource-pack-sha1=<sha1>.
+# These options are for when you want the plugin to deliver the pack instead.
+pack:
+  # Push the pack to every player on join (leave false when server.properties already does it).
+  send: false
+  # Kick players who decline it.
+  required: false
+  delay-ticks: 20
+  # Where clients download the pack. The CI publishes it to your repository's "pack-latest" release.
+  url: "https://github.com/somethingenteryourname-ui/magic-magma/releases/download/pack-latest/Shardwatch-pack.zip"
+  # 40 hex characters, or "auto" to download the pack once at startup and hash it.
+  sha1: auto
+  # Built-in web server for private repositories: serves plugins/Shardwatch/<file> and hashes it locally.
+  host:
+    enabled: false
+    file: Shardwatch-pack.zip
+    bind: 0.0.0.0
+    port: 8163
+    # The address players use, e.g. http://play.example.net:8163/Shardwatch-pack.zip
+    public-url: ""
+
 storage:
   file: shardwatch.db
   # Old rows are pruned every 6 hours. "perm" keeps them forever.

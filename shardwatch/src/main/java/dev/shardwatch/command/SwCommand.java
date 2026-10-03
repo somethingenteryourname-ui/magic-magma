@@ -62,6 +62,31 @@ public final class SwCommand extends BaseCommand {
             }
             case "give" -> give(sender, label, args);
             case "lustre" -> lustre(sender, label, args);
+            case "pack" -> {
+                if (args.length > 1 && args[1].equalsIgnoreCase("status")) {
+                    if (has(sender, "shardwatch.admin.pack")) {
+                        plugin.pack().status(sender);
+                    }
+                    return true;
+                }
+                Player target = args.length > 1 && sender.hasPermission("shardwatch.admin.pack") ? online(sender, args[1])
+                        : requirePlayer(sender);
+                if (target != null && plugin.pack().send(target)) {
+                    plugin.lang().send(sender, "pack.sent", Text.p("player", target.getName()));
+                }
+            }
+            case "status" -> {
+                if (!has(sender, "shardwatch.admin.reload")) {
+                    return true;
+                }
+                plugin.flares().store().countOpen().thenAccept(open -> plugin.sync(() -> {
+                    plugin.lang().send(sender, "admin.status", Text.p("version", plugin.getPluginMeta().getVersion()),
+                            Text.p("open", open), Text.p("petrified", plugin.verdicts().petrifiedPlayers().size()),
+                            Text.p("facets", plugin.facets().all().size()), Text.p("presets", plugin.fx().presetNames().size()),
+                            Text.p("pack", plugin.pack().ready() ? "ready" : "not configured"));
+                    plugin.pack().status(sender);
+                }));
+            }
             case "refine", "refinements" -> {
                 Player p = requirePlayer(sender);
                 if (p != null && has(p, "shardwatch.staff")) {
@@ -181,8 +206,13 @@ public final class SwCommand extends BaseCommand {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String @NotNull [] args) {
         if (args.length == 1) {
-            return filter(List.of("menu", "settings", "help", "kit", "give", "lustre", "refine", "keepsakes", "reload",
-                    "version"), args[0]);
+            return filter(List.of("menu", "settings", "help", "kit", "give", "lustre", "refine", "keepsakes", "pack",
+                    "status", "reload", "version"), args[0]);
+        }
+        if (args[0].equalsIgnoreCase("pack") && args.length == 2) {
+            List<String> out = new ArrayList<>(filter(List.of("status"), args[1]));
+            out.addAll(Players.onlineNames(args[1]));
+            return out;
         }
         if (args[0].equalsIgnoreCase("lustre")) {
             if (args.length == 2) {

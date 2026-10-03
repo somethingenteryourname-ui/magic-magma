@@ -97,9 +97,17 @@ def save_png(arr: np.ndarray, path: Path):
     to_image(arr).save(path, optimize=True)
 
 
-def save_json(obj, path: Path):
+def save_json(obj, path: Path, compact=False):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(obj, indent=2) + '\n')
+    if compact:
+        path.write_text(json.dumps(obj, separators=(',', ':'), ensure_ascii=False) + '\n')
+    else:
+        path.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + '\n')
+
+
+def stable_uuid(*parts) -> str:
+    """Deterministic UUIDs so regenerating the pack does not change unchanged files."""
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, 'shardwatch:' + ':'.join(map(str, parts))))
 
 
 def anim_meta(frametime: int, interpolate=True):
@@ -233,7 +241,8 @@ def write_model(name: str, elements, display, has_glow: bool):
         'elements': elements,
         'display': display,
     }
-    save_json(model, NS / 'models' / 'item' / f'{name}.json')
+    # Models are minified: a smaller pack downloads faster. The .bbmodel next to each is the editable source.
+    save_json(model, NS / 'models' / 'item' / f'{name}.json', compact=True)
     return model
 
 
@@ -250,14 +259,14 @@ def write_bbmodel(name: str, model: dict, tex_paths: dict[str, Path], frametime:
             'width': img.width, 'height': img.height, 'uv_width': 64, 'uv_height': 64,
             'particle': key == '0', 'render_mode': 'emissive' if key == 'glow' else 'default',
             'frame_time': frametime if img.height > img.width else 1, 'frame_interpolate': True,
-            'uuid': str(uuid.uuid4()), 'relative_path': f'../resourcepack/assets/shardwatch/textures/item/{path.name}',
+            'uuid': stable_uuid(name, 'texture', key), 'relative_path': f'../resourcepack/assets/shardwatch/textures/item/{path.name}',
             'source': 'data:image/png;base64,' + data,
         }
         textures.append(entry)
     elements = []
     outliner = []
-    for e in model['elements']:
-        uid = str(uuid.uuid4())
+    for idx, e in enumerate(model['elements']):
+        uid = stable_uuid(name, 'element', idx)
         faces = {}
         for side in ('north', 'east', 'south', 'west', 'up', 'down'):
             f = e['faces'].get(side)
@@ -278,7 +287,7 @@ def write_bbmodel(name: str, model: dict, tex_paths: dict[str, Path], frametime:
         'name': name, 'parent': '', 'ambientocclusion': True, 'front_gui_light': True,
         'visible_box': [1, 1, 0], 'variable_placeholders': '', 'variable_placeholder_buttons': [],
         'unhandled_root_fields': {}, 'resolution': {'width': 64, 'height': 64},
-        'elements': elements, 'outliner': [{'name': name, 'origin': [8, 8, 8], 'color': 0, 'uuid': str(uuid.uuid4()),
+        'elements': elements, 'outliner': [{'name': name, 'origin': [8, 8, 8], 'color': 0, 'uuid': stable_uuid(name, 'group'),
                                             'export': True, 'mirror_uv': False, 'isOpen': True, 'locked': False,
                                             'visibility': True, 'autouv': 0, 'children': outliner}],
         'textures': textures, 'display': model['display'],

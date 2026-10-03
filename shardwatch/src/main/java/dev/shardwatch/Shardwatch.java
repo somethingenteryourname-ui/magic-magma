@@ -22,6 +22,7 @@ import dev.shardwatch.gui.ChatPrompt;
 import dev.shardwatch.gui.Icons;
 import dev.shardwatch.gui.MenuListener;
 import dev.shardwatch.gui.MenuService;
+import dev.shardwatch.pack.PackService;
 import dev.shardwatch.profile.ProfileService;
 import dev.shardwatch.progress.AuraTask;
 import dev.shardwatch.progress.LustreService;
@@ -67,6 +68,7 @@ public final class Shardwatch extends JavaPlugin {
     private ChatPrompt prompts;
     private LustreService lustre;
     private SigilService sigils;
+    private PackService pack;
 
     @Override
     public void onEnable() {
@@ -98,9 +100,10 @@ public final class Shardwatch extends JavaPlugin {
         prompts = new ChatPrompt(this);
         lustre = new LustreService(this);
         sigils = new SigilService(this);
+        pack = new PackService(this);
 
         // Prompts first: a typed answer must be swallowed before any other chat handling.
-        listen(prompts, fx, profiles, new VerdictListener(this), facets, echoes, glint, toolListener, new MenuListener(), lustre);
+        listen(prompts, fx, profiles, new VerdictListener(this), facets, echoes, glint, toolListener, new MenuListener(), lustre, pack);
         Bukkit.getScheduler().runTaskTimer(this, new AuraTask(this), 40L, 3L);
 
         VerdictCommands verdictCommands = new VerdictCommands(this);
@@ -152,6 +155,9 @@ public final class Shardwatch extends JavaPlugin {
         if (animations != null) {
             animations.shutdown();
         }
+        if (pack != null) {
+            pack.stopHost();
+        }
         if (echoes != null) {
             echoes.flush();
         }
@@ -172,6 +178,29 @@ public final class Shardwatch extends JavaPlugin {
         flares.reload();
         echoes.reload();
         glint.reload();
+        pack.reload();
+        validate();
+    }
+
+    /** Warns about config values that would silently do nothing. */
+    private void validate() {
+        for (String path : new String[]{"rewind.max-time", "verdicts.hush.default-duration", "verdicts.hush.max-duration",
+                "verdicts.encase.default-duration", "verdicts.encase.max-duration", "storage.retention.echoes",
+                "storage.retention.chat", "storage.retention.audit"}) {
+            String v = getConfig().getString(path);
+            if (v != null && Durations.parse(v) == null) {
+                getLogger().warning("config.yml " + path + ": '" + v + "' is not a duration (try 30m, 7d, perm).");
+            }
+        }
+        for (String key : getConfig().getConfigurationSection("glint.ores") == null ? java.util.Set.<String>of()
+                : getConfig().getConfigurationSection("glint.ores").getKeys(false)) {
+            if (org.bukkit.Material.matchMaterial(key) == null) {
+                getLogger().warning("config.yml glint.ores: unknown block " + key);
+            }
+        }
+        if (facets.all().isEmpty()) {
+            getLogger().warning("config.yml facets.ranks is empty; nobody can be given a Facet.");
+        }
     }
 
     private void prune() {
@@ -301,5 +330,9 @@ public final class Shardwatch extends JavaPlugin {
 
     public SigilService sigils() {
         return sigils;
+    }
+
+    public PackService pack() {
+        return pack;
     }
 }

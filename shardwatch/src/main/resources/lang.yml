@@ -24,7 +24,8 @@ help:
   - "  <teal>/echo</teal> <muted>inspect mode · </muted><teal>/rewind <who> <time> [radius]</teal>"
   - "  <teal>/glint</teal> <muted>x-ray alerts · </muted><teal>/facet</teal> <muted>staff ranks"
   - "  <teal>/hum</teal> <muted>staff chat · </muted><teal>/veil</teal> <muted>vanish · </muted><teal>/scope</teal> <muted>logs"
-  - "  <pink>/sw kit</pink> <muted>your staff tools · </muted><pink>/sw give</pink> <muted>· </muted><pink>/sw reload"
+  - "  <pink>/sw</pink> <muted>Crystal Console · </muted><pink>/sw kit</pink> <muted>staff tools · </muted><pink>/sw lustre</pink> <muted>progress"
+  - "  <pink>/sw give · /sw pack · /sw status · /sw reload</pink> <muted>admin"
   - "<gradient:#7FE8E0:#F59AC8>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gradient>"
 
 usage:
@@ -580,6 +581,13 @@ lustre:
   adjusted: "<prefix><ok><player> now has <total> Lustre."
   not-enough: "<prefix><bad><player> doesn't have that much Lustre."
 
+pack:
+  prompt: "<gradient:#F59AC8:#7FE8E0><b>✦ Shardwatch crystal pack</b></gradient><newline><muted>Crystal staff tools, menus, sounds and particles."
+  not-ready: "<prefix><bad>The resource pack isn't configured (or its SHA-1 is still being computed)."
+  sent: "<prefix><ok>Sent the crystal pack to <player>."
+  status: "<prefix><muted>Pack</muted> <white><url></white><newline><muted>  SHA-1</muted> <pink><sha1></pink> <muted>· push on join</muted> <send> <muted>· built-in host</muted> <host>"
+
 admin:
+  status: "<prefix><white>Shardwatch <version></white> <muted>· open Flares</muted> <pink><open></pink> <muted>· petrified</muted> <ice><petrified></ice> <muted>· Facets</muted> <teal><facets></teal> <muted>· effect presets</muted> <teal><presets></teal> <muted>· pack</muted> <white><pack>"
   reloaded: "<prefix><ok>Reloaded in <ms> ms."
   version: "<prefix><muted>Shardwatch <pink><version>"

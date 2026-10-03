@@ -1,3 +1,14 @@
+# magic-magma
+
+This repository holds two Paper 1.21.11 plugins. `./gradlew build` builds both, and GitHub Actions uploads them as artifacts.
+
+| Plugin | Folder | What it is |
+|---|---|---|
+| **CrystallineResonance** | this folder (`src/`) | Nether crystals, spell tomes and mana-powered magic (below). |
+| **Shardwatch** | [`shardwatch/`](shardwatch) | A crystal staff suite: reports, punishments with history, griefing rollback, x-ray alerts, staff ranks, a log viewer, staff tools and progression, with its own resource pack. See [shardwatch/README.md](shardwatch/README.md). |
+
+---
+
 # CrystallineResonance
 
 A Paper plugin for Minecraft Java **1.21.11**. Players dig up Amethyst, Copper and Quartz crystals in the Nether, craft them into spell tomes, and right-click the tomes to cast spells that cost mana. Mana regenerates over time.
