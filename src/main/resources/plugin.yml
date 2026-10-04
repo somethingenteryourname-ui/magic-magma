@@ -1,86 +1,23 @@
-name: CrystallineResonance
-version: '${version}'
-main: dev.crystalline.resonance.CrystallineResonance
-api-version: '1.21.11'
-description: '${description}'
-authors: [somethingenteryourname]
-website: https://github.com/somethingenteryourname-ui/magic-magma
-
+name: CustomTrims
+version: '${project.version}'
+main: dev.customtrims.CustomTrimsPlugin
+api-version: '1.21'
+description: Custom armor trims with colored particle trails and auras.
 commands:
-  crystalline:
-    description: CrystallineResonance commands.
-    usage: /<command> help
-    aliases: [cr, crystal]
-
+  ctrim:
+    description: Customize your armor trim, trail and aura.
+    aliases: [customtrim, trims]
+    usage: /ctrim help
 permissions:
-  crystalline.*:
-    description: Grants every CrystallineResonance permission.
-    default: false
-    children:
-      crystalline.admin: true
-      crystalline.spell.*: true
-      crystalline.craft.*: true
-      crystalline.bypass.*: true
-      crystalline.gather: true
-      crystalline.command.mana: true
-
-  crystalline.admin:
-    description: Reload the plugin, give crystals/tomes, set mana and reset cooldowns.
+  customtrims.use:
+    description: Edit the trim on your own armor and apply presets to yourself.
+    default: true
+  customtrims.give:
+    description: Give trimmed armor sets to players.
+    default: op
+  customtrims.admin:
+    description: Reload, and apply/remove trims for other players.
     default: op
     children:
-      crystalline.command.mana: true
-
-  crystalline.command.mana:
-    description: View your own mana with /crystalline mana.
-    default: true
-
-  crystalline.gather:
-    description: Find crystals when mining in the Nether.
-    default: true
-
-  crystalline.spell.*:
-    description: Cast every spell.
-    default: true
-    children:
-      crystalline.spell.frost: true
-      crystalline.spell.inferno: true
-      crystalline.spell.lightning: true
-  crystalline.spell.frost:
-    description: Cast Frost Bolt.
-    default: true
-  crystalline.spell.inferno:
-    description: Cast Inferno Wave.
-    default: true
-  crystalline.spell.lightning:
-    description: Cast Lightning Strike.
-    default: true
-
-  crystalline.craft.*:
-    description: Craft every spell tome.
-    default: true
-    children:
-      crystalline.craft.frost: true
-      crystalline.craft.inferno: true
-      crystalline.craft.lightning: true
-  crystalline.craft.frost:
-    description: Craft the Tome of Frost Bolt.
-    default: true
-  crystalline.craft.inferno:
-    description: Craft the Tome of Inferno Wave.
-    default: true
-  crystalline.craft.lightning:
-    description: Craft the Tome of Lightning Strike.
-    default: true
-
-  crystalline.bypass.*:
-    description: Ignore spell cooldowns and mana costs.
-    default: false
-    children:
-      crystalline.bypass.cooldown: true
-      crystalline.bypass.mana: true
-  crystalline.bypass.cooldown:
-    description: Ignore spell cooldowns.
-    default: false
-  crystalline.bypass.mana:
-    description: Cast spells without spending mana.
-    default: false
+      customtrims.use: true
+      customtrims.give: true

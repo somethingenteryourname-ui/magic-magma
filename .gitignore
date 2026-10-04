@@ -1,9 +1,3 @@
-.gradle/
-build/
-out/
-run/
-.idea/
+target/
 *.iml
-.vscode/
-.DS_Store
-dist/
+.idea/
